@@ -8,6 +8,7 @@ let activeStyle = {
 };
 
 class Navigation extends Component {
+	
 	render() {
 		return (
 			<div className={classes.body}>
