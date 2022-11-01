@@ -1,0 +1,68 @@
+.layout {
+    /* display: flex; */
+    /* flex-direction: column; */
+    margin-top: 5rem;
+    width: 100%;
+    min-height: 100vh;
+}
+
+.categoryName {
+    font-size: 42px;
+    font-weight: 400;
+}
+
+.addToCart {
+    position: absolute;
+    right: 30px;
+    bottom: 35px;
+    background: none;
+    border: none;
+    opacity: 0;
+    transition: opacity .3s;
+    cursor: pointer;
+}
+
+.cards {
+    margin-top: 5rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.card {
+    position: relative;
+    width: 380px;
+    height: 444px;
+    padding: 1rem 1rem 2rem;
+    margin-bottom: 5rem;
+    text-decoration: none;
+    color: #000;
+    font-size: 18px;
+    transition: box-shadow .3s;
+}
+
+.card h3 {
+    font-weight: 300;
+}
+
+.card p {
+    font-weight: 500;
+    padding-bottom: 1rem;
+}
+
+.card:hover {
+    box-shadow: 0 0 10px rgb(79, 79, 79);
+}
+
+.card:hover .addToCart {
+    opacity: 1;
+}
+
+.card img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    margin-bottom: 1rem;
+}

@@ -19,7 +19,7 @@ class Navigation extends Component {
 							to='/1'
 							style={({ isActive }) => (isActive ? activeStyle : undefined)}
 						>
-							women
+							all
 						</NavLink>
 					</li>
 					<li className={classes.linkContainer}>
@@ -28,7 +28,7 @@ class Navigation extends Component {
 							to='/3'
 							style={({ isActive }) => (isActive ? activeStyle : undefined)}
 						>
-							men
+							tech
 						</NavLink>
 					</li>
 					<li className={classes.linkContainer}>
@@ -37,7 +37,7 @@ class Navigation extends Component {
 							to='/2'
 							style={({ isActive }) => (isActive ? activeStyle : undefined)}
 						>
-							kids
+							clothes
 						</NavLink>
 					</li>
 				</ul>

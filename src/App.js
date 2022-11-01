@@ -9,7 +9,7 @@ import {
 	from,
 } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
-import Test from './components/test';
+import ItemsPage from './components/ItemsPage';
 
 
 const errorLink = onError(({ graphqlErrors, networkError }) => {
@@ -34,7 +34,7 @@ export const App = () => {
         <BrowserRouter>
           <Navigation />
           <Routes>
-            <Route path='/1' element={<Test />} />
+            <Route path='/1' element={<ItemsPage />} />
             <Route path='/2' element={<h1>skrrt</h1>} />
           </Routes>
         </BrowserRouter>
