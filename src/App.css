@@ -10,5 +10,17 @@
     padding: 0 10px;
 }
 
+.shadow {
+	position: absolute;
+	width: 1440px;
+	height: 100vh;
+	left: 0px;
+	top: 85px;
+	background: rgba(57, 55, 72, 0.22);
+    z-index: 1;
+    display: none;
+    /* overflow: hidden on body when cart is shown */
+}
+
 
 

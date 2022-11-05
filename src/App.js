@@ -31,6 +31,7 @@ export const App = () => {
   return (
     <ApolloProvider client={client}>
       <div className='wrapper'>
+      <div className='shadow'></div>
         <BrowserRouter>
           <Navigation />
           <Routes>

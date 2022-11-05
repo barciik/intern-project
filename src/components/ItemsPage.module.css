@@ -1,80 +1,90 @@
+
+
 .layout {
-    /* display: flex; */
-    /* flex-direction: column; */
-    margin-top: 5rem;
-    width: 100%;
-    min-height: 100vh;
+    position: relative;
+	/* display: flex; */
+	/* flex-direction: column; */
+	margin-top: 5rem;
+	width: 100%;
+	min-height: 100vh;
 }
 
+
+
 .categoryName {
-    font-size: 42px;
-    font-weight: 400;
+	font-size: 42px;
+	font-weight: 400;
 }
 
 .addToCart {
-    position: absolute;
-    right: 30px;
-    bottom: 35px;
-    background: none;
-    border: none;
-    opacity: 0;
-    transition: opacity .3s;
-    cursor: pointer;
+	position: absolute;
+	right: 30px;
+	bottom: 35px;
+	background: none;
+	border: none;
+	opacity: 0;
+	transition: opacity 0.3s;
+	cursor: pointer;
 }
 
 .cards {
-    margin-top: 5rem;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-    flex-wrap: wrap;
+	margin-top: 5rem;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	flex-direction: row;
+	flex-wrap: wrap;
 }
 
-.card, .cardInactive {
-    position: relative;
-    width: 386px;
-    /* height: 444px; */
-    padding: 1rem 1rem 2rem;
-    margin-bottom: 5rem;
-    text-decoration: none;
-    color: #000;
-    font-size: 18px;
-    transition: box-shadow .3s;
+.card,
+.cardInactive {
+	position: relative;
+	width: 386px;
+	/* height: 444px; */
+	padding: 1rem 1rem 2rem;
+	margin-bottom: 5rem;
+	text-decoration: none;
+	color: #000;
+	font-size: 18px;
+	transition: box-shadow 0.3s;
 }
 
-.card h3, .cardInactive h3 {
-    font-weight: 300;
+.card h3,
+.cardInactive h3 {
+	font-weight: 300;
 }
 
-.card p, .cardInactive p {
-    font-weight: 500;
+.card p,
+.cardInactive p {
+	font-weight: 500;
 }
 
 .card:hover {
-    box-shadow: 0px 4px 35px rgba(168, 172, 176, 0.19);
+	box-shadow: 0px 4px 35px rgba(168, 172, 176, 0.19);
 }
 
 .card:hover .addToCart {
-    opacity: 1;
+	opacity: 1;
 }
 
-.card img, .cardInactive img {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    margin-bottom: 1rem;
+.card img,
+.cardInactive img {
+	width: 100%;
+	aspect-ratio: 1 / 1;
+	object-fit: cover;
+	margin-bottom: 1rem;
 }
 
 .outOfStock {
-    position: absolute;
-    top: 45%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-transform: uppercase;
+	position: absolute;
+	top: 45%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	text-transform: uppercase;
 }
 
-.cardInactive img, .cardInactive p, .cardInactive h3 {
-    opacity: 0.5;
+.cardInactive img,
+.cardInactive p,
+.cardInactive h3 {
+	opacity: 0.5;
 }
-

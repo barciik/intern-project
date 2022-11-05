@@ -10,12 +10,12 @@ const DUMMY_ITEMS = [
 			{
 				id: 'size',
 				name: 'size',
-				items: ['XS', 'S', 'M', 'L'],
+				items: ['XS', 'S', 'M', 'L', 'XL'],
 			},
 			{
 				id: 'color',
 				name: 'color',
-				items: ['blue', 'red', 'green'],
+				items: ['#44FF03', '#03FFF7', '#030BFF', '#000000'],
 			},
 		],
 		size: 'L',
@@ -122,9 +122,8 @@ export default class Cart extends Component {
 													<div className={classes.colors}>
 														{el.items.map((attr) => {
                                                             return (
-                                                                <p key={attr} className={classes.color}>
-																	{attr}
-																</p>
+                                                                <div key={attr} className={classes.color} style={{backgroundColor: `${attr}`}}>
+																</div>
 															);
 														})}
 													</div>

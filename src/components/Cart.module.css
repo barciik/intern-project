@@ -30,11 +30,40 @@
 
 .sizes, .colors {
     display: flex;
+    flex-wrap: wrap;
 }
 
 .size, .color {
     margin-top: 0.5rem;
     margin-right: 0.5rem;
+}
+
+.size {
+    border: 1px solid #1D1F22;
+    width: 24px;
+    height: 24px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 160%;
+    transition: color .3s, background-color .3s;
+    cursor: pointer;
+}
+
+.size:hover {
+    background-color: #000;
+    color: #fff;
+}
+
+.color {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    padding: 2px;
+}
+
+.color:hover {
+    border: 1px solid #5ECE7B;
 }
 
 .cartButtons {
@@ -45,10 +74,11 @@
 }
 
 .cartButtons button {
-    border: 3px solid black;
+    border: 1px solid #1D1F22;
     background: none;
     width: 2rem;
     height: 2rem;
+    margin: 0 0.3rem;
 }
 
 .itemImg{
@@ -59,6 +89,7 @@
 .total {
     display: flex;
     justify-content: space-between;
+    margin-top: 1rem;
 }
 
 .checkoutBtns {
