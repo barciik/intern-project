@@ -38,7 +38,13 @@
 }
 
 .cartArea {
+    position: relative;
 	display: flex;
+}
+
+.cart {
+    border: none;
+    background: none;
 }
 
 .logo {

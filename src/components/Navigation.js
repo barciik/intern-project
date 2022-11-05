@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
+import Cart from './Cart';
 import classes from './Navigation.module.css';
 
 let activeStyle = {
@@ -8,6 +9,20 @@ let activeStyle = {
 };
 
 class Navigation extends Component {
+	constructor() {
+		super();
+		this.state = {
+			showCart: false,
+		}
+	}
+
+	showCart() {
+		this.setState(() => {
+			return {
+				showCart: !this.state.showCart
+			}
+		})
+	}
 	
 	render() {
 		return (
@@ -53,9 +68,10 @@ class Navigation extends Component {
 						<option value={'JPY'}>¥ JPY</option>
 					</select>
 
-					<div className={classes.cart}>
+					<button onClick={this.showCart.bind(this)} className={classes.cart}>
 						<img src='./cart.svg' alt='cart' />
-					</div>
+					</button>
+					{this.state.showCart && <Cart />}
 				</div>
 			</div>
 		);
