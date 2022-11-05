@@ -89,80 +89,85 @@ export default class Cart extends Component {
 		return (
 			<div className={classes.cartBody}>
 				<h3>My bag, {DUMMY_ITEMS.length} items</h3>
-                <div className={classes.cartItems}>
-
-                
-				{DUMMY_ITEMS.map((item) => {
-                    return (
-                        <div key={item.id} className={classes.cartItem}>
-							<div className={classes.itemInfo}>
-								<h4>{item.name}</h4>
-								<p>{item.price}</p>
-								{item.attributes &&
-									item.attributes.map((el) => {
-                                        if (el.id === 'size') {
-                                            return (
-                                                <div key={el.id} className={classes.attributes}>
-													<p>Size: </p>
-													<div className={classes.sizes}>
-														{el.items.map((attr) => {
-                                                            return (
-                                                                <p key={attr} className={classes.size}>
-																	{attr}
-																</p>
-															);
-														})}
-													</div>
-												</div>
-											);
-										} else if (el.id === 'color') {
-                                            return (
-                                                <div key={el.id} className={classes.attributes}>
-                                                    <p>Color: </p>
-													<div className={classes.colors}>
-														{el.items.map((attr) => {
-                                                            return (
-                                                                <div key={attr} className={classes.color} style={{backgroundColor: `${attr}`}}>
-																</div>
-															);
-														})}
-													</div>
-												</div>
-											);
-										}
-										return (
-                                            <div key={el.id} className={classes.attributes}>
-												{el.items.map((attr) => {
-                                                    return (
-                                                        <div className={classes.attribute} key={attr}>
-															<p>{attr}</p>
+				<div className={classes.cartItems}>
+					{DUMMY_ITEMS.map((item) => {
+						return (
+							<div key={item.id} className={classes.cartItem}>
+								<div className={classes.itemInfo}>
+									<h4>{item.name}</h4>
+									<p>{item.price}</p>
+									{item.attributes &&
+										item.attributes.map((el) => {
+											if (el.id === 'size') {
+												return (
+													<div key={el.id} className={classes.attributes}>
+														<p>Size: </p>
+														<div className={classes.sizes}>
+															{el.items.map((attr) => {
+																return (
+																	<p key={attr} className={classes.size}>
+																		{attr}
+																	</p>
+																);
+															})}
 														</div>
-													);
-												})}
-											</div>
-										);
-									})}
+													</div>
+												);
+											} else if (el.id === 'color') {
+												return (
+													<div key={el.id} className={classes.attributes}>
+														<p>Color: </p>
+														<div className={classes.colors}>
+															{el.items.map((attr) => {
+																return (
+																	<div
+																		key={attr}
+																		className={classes.color}
+																		style={{ backgroundColor: `${attr}` }}
+																	></div>
+																);
+															})}
+														</div>
+													</div>
+												);
+											}
+											return (
+												<div key={el.id} className={classes.attributes}>
+													{el.items.map((attr) => {
+														return (
+															<div className={classes.attribute} key={attr}>
+																<p>{attr}</p>
+															</div>
+														);
+													})}
+												</div>
+											);
+										})}
+								</div>
+								<div className={classes.cartButtons}>
+									<button>+</button>
+									<p>{item.itemCount}</p>
+									<button>-</button>
+								</div>
+								<img
+									className={classes.itemImg}
+									src={item.img}
+									alt={item.name}
+								></img>
 							</div>
-							<div className={classes.cartButtons}>
-								<button>+</button>
-								<p>{item.itemCount}</p>
-								<button>-</button>
-							</div>
-							<img className={classes.itemImg} src={item.img} alt={item.name}></img>
-						</div>
-					);
-				})}
-                </div>
-                <div className={classes.total}>
-                    <span>Total: </span>
-                    <span>200$</span>
-                </div>
-                <div className={classes.checkoutBtns}>
-                    <button className={classes.showCartBtn}>view bag</button>
-                    <button className={classes.checkoutBtn}>checkout</button>
-                </div>
+						);
+					})}
+				</div>
+				<div className={classes.total}>
+					<span>Total: </span>
+					<span>200$</span>
+				</div>
+				<div className={classes.checkoutBtns}>
+					<button className={classes.showCartBtn}>view bag</button>
+					<button className={classes.checkoutBtn}>checkout</button>
+				</div>
 			</div>
-            
 		);
 	}
 }
+
