@@ -7,7 +7,7 @@ import { getItemsQuery } from '../GraphQL/Queries';
 
 class Test extends Component {
 	testMethod(e) {
-		console.log('object');
+		console.log(e);
 	}
 	displayItems() {
 		const data = this.props.data;
@@ -38,7 +38,7 @@ class Test extends Component {
 				}
 				return (
 					<div className={classes.card} key={data.id}>
-						<Link className={classes.link} to={data.id} >
+						<Link className={classes.link} to={data.id}>
 							<img src={data.gallery[0]} alt={data.name} />
 							<h3 className={classes.title}>{data.name}</h3>
 							<p className={classes.price}>
@@ -47,7 +47,10 @@ class Test extends Component {
 							</p>
 						</Link>
 						<button
-							onClick={this.testMethod.bind(this)}
+							type='submit'
+							onClick={() => {
+								this.testMethod(data)
+							}}
 							className={classes.addToCart}
 						>
 							<img src='./add-to-cart.svg' alt='add to cart button' />

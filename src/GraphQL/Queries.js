@@ -31,6 +31,10 @@ export const getCategories = gql`
 		categories {
 			name
 		}
+		currencies {
+			label
+			symbol
+		}
 	}
 `;
 
