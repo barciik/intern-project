@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import Cart from './Cart';
 import classes from './Navigation.module.css';
+import { getCategories } from '../GraphQL/Queries';
+import { graphql } from '@apollo/client/react/hoc';
 
 let activeStyle = {
 	borderBottom: '2px solid #5ECE7B',
@@ -23,37 +25,28 @@ class Navigation extends Component {
 			}
 		})
 	}
+
+	displayCategories() {
+		const data = this.props.data
+		if(data.loading) {
+			return <p>Loading...</p>
+		} else if(!data.loading) {
+			return (
+				data.categories.map(item => {
+					return (
+						<NavLink className={classes.link} to={item.name}style={({ isActive }) => (isActive ? activeStyle : undefined)} key={item.name}>{item.name}</NavLink>
+					)
+				})
+			)
+		}
+	}
 	
 	render() {
 		return (
 			<div className={classes.body}>
 				<ul className={classes.links}>
 					<li className={classes.linkContainer}>
-						<NavLink
-							className={classes.link}
-							to='/1'
-							style={({ isActive }) => (isActive ? activeStyle : undefined)}
-						>
-							all
-						</NavLink>
-					</li>
-					<li className={classes.linkContainer}>
-						<NavLink
-							className={classes.link}
-							to='/3'
-							style={({ isActive }) => (isActive ? activeStyle : undefined)}
-						>
-							tech
-						</NavLink>
-					</li>
-					<li className={classes.linkContainer}>
-						<NavLink
-							className={classes.link}
-							to='/2'
-							style={({ isActive }) => (isActive ? activeStyle : undefined)}
-						>
-							clothes
-						</NavLink>
+						{this.displayCategories()}
 					</li>
 				</ul>
 				<div className={classes.logo}>
@@ -78,4 +71,4 @@ class Navigation extends Component {
 	}
 }
 
-export default Navigation;
+export default graphql(getCategories)(Navigation);

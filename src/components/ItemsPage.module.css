@@ -19,7 +19,7 @@
 .addToCart {
 	position: absolute;
 	right: 30px;
-	bottom: 35px;
+	bottom: 50px;
 	background: none;
 	border: none;
 	opacity: 0;
@@ -31,7 +31,7 @@
 	margin-top: 5rem;
 	width: 100%;
 	display: flex;
-	justify-content: space-between;
+	justify-content: center;
 	flex-direction: row;
 	flex-wrap: wrap;
 }
@@ -43,10 +43,15 @@
 	/* height: 444px; */
 	padding: 1rem 1rem 2rem;
 	margin-bottom: 5rem;
-	text-decoration: none;
-	color: #000;
+	
+	
 	font-size: 18px;
 	transition: box-shadow 0.3s;
+}
+
+.link {
+    text-decoration: none;
+    color: #000;
 }
 
 .card h3,

@@ -1,42 +1,20 @@
 import React, { Component } from 'react';
-import { gql } from '@apollo/client';
+
 import { graphql } from '@apollo/client/react/hoc';
 import classes from './ItemsPage.module.css';
 import { Link } from 'react-router-dom';
-
-const getItemsQuery = gql`
-	{
-		
-		category {
-			name
-			products {
-				id
-				name
-				inStock
-				gallery
-				description
-				prices {
-					currency {
-						label
-						symbol
-					}
-					amount
-				}
-			}
-		}
-	}
-`;
+import { getItemsQuery } from '../GraphQL/Queries';
 
 class Test extends Component {
 	testMethod(e) {
-		e.stopPropagation();
+		console.log('object');
 	}
 	displayItems() {
 		const data = this.props.data;
 		if (data.loading) {
 			return <p>Loading...</p>;
 		} else if (!data.loading) {
-			return data.category.products.map((data) => {
+			return data.categories[this.props.index].products.map((data) => {
 				// console.log(data);
 				if (!data.inStock) {
 					return (
@@ -44,8 +22,8 @@ class Test extends Component {
 							<div className={classes.cardShadow}></div>
 							<span className={classes.outOfStock}>out of stock</span>
 							<img src={data.gallery[0]} alt={data.name} />
-							<h3>{data.name}</h3>
-							<p>
+							<h3 className={classes.title}>{data.name}</h3>
+							<p className={classes.price}>
 								{data.prices[0].amount}
 								{data.prices[0].currency.symbol}
 							</p>
@@ -59,20 +37,22 @@ class Test extends Component {
 					);
 				}
 				return (
-					<Link to={data.id} className={classes.card} key={data.id}>
-						<img src={data.gallery[0]} alt={data.name} />
-						<h3>{data.name}</h3>
-						<p>
-							{data.prices[0].amount}
-							{data.prices[0].currency.symbol}
-						</p>
+					<div className={classes.card} key={data.id}>
+						<Link className={classes.link} to={data.id} >
+							<img src={data.gallery[0]} alt={data.name} />
+							<h3 className={classes.title}>{data.name}</h3>
+							<p className={classes.price}>
+								{data.prices[0].amount}
+								{data.prices[0].currency.symbol}
+							</p>
+						</Link>
 						<button
 							onClick={this.testMethod.bind(this)}
 							className={classes.addToCart}
 						>
 							<img src='./add-to-cart.svg' alt='add to cart button' />
 						</button>
-					</Link>
+					</div>
 				);
 			});
 		}
@@ -81,10 +61,8 @@ class Test extends Component {
 	render() {
 		return (
 			<div className={classes.layout}>
-				<h2 className={classes.categoryName}>All</h2>
-				<div className={classes.cards}>
-					{this.displayItems()}
-				</div>
+				<h2 className={classes.categoryName}>{this.props.category}</h2>
+				<div className={classes.cards}>{this.displayItems()}</div>
 			</div>
 		);
 	}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import classes from './Cart.module.css';
+import cartStyles from './Cart.module.css';
 
 const DUMMY_ITEMS = [
 	{
@@ -87,25 +87,25 @@ const DUMMY_ITEMS = [
 export default class Cart extends Component {
 	render() {
 		return (
-			<div className={classes.cartBody}>
+			<div className={cartStyles.cartBody}>
 				<h3>My bag, {DUMMY_ITEMS.length} items</h3>
-				<div className={classes.cartItems}>
+				<div className={cartStyles.cartItems}>
 					{DUMMY_ITEMS.map((item) => {
 						return (
-							<div key={item.id} className={classes.cartItem}>
-								<div className={classes.itemInfo}>
+							<div key={item.id} className={cartStyles.cartItem}>
+								<div className={cartStyles.itemInfo}>
 									<h4>{item.name}</h4>
 									<p>{item.price}</p>
 									{item.attributes &&
 										item.attributes.map((el) => {
 											if (el.id === 'size') {
 												return (
-													<div key={el.id} className={classes.attributes}>
+													<div key={el.id} className={cartStyles.attributes}>
 														<p>Size: </p>
-														<div className={classes.sizes}>
+														<div className={cartStyles.sizes}>
 															{el.items.map((attr) => {
 																return (
-																	<p key={attr} className={classes.size}>
+																	<p key={attr} className={cartStyles.size}>
 																		{attr}
 																	</p>
 																);
@@ -115,14 +115,14 @@ export default class Cart extends Component {
 												);
 											} else if (el.id === 'color') {
 												return (
-													<div key={el.id} className={classes.attributes}>
+													<div key={el.id} className={cartStyles.attributes}>
 														<p>Color: </p>
-														<div className={classes.colors}>
+														<div className={cartStyles.colors}>
 															{el.items.map((attr) => {
 																return (
 																	<div
 																		key={attr}
-																		className={classes.color}
+																		className={cartStyles.color}
 																		style={{ backgroundColor: `${attr}` }}
 																	></div>
 																);
@@ -132,10 +132,10 @@ export default class Cart extends Component {
 												);
 											}
 											return (
-												<div key={el.id} className={classes.attributes}>
+												<div key={el.id} className={cartStyles.attributes}>
 													{el.items.map((attr) => {
 														return (
-															<div className={classes.attribute} key={attr}>
+															<div className={cartStyles.attribute} key={attr}>
 																<p>{attr}</p>
 															</div>
 														);
@@ -144,13 +144,13 @@ export default class Cart extends Component {
 											);
 										})}
 								</div>
-								<div className={classes.cartButtons}>
+								<div className={cartStyles.cartButtons}>
 									<button>+</button>
 									<p>{item.itemCount}</p>
 									<button>-</button>
 								</div>
 								<img
-									className={classes.itemImg}
+									className={cartStyles.itemImg}
 									src={item.img}
 									alt={item.name}
 								></img>
@@ -158,13 +158,13 @@ export default class Cart extends Component {
 						);
 					})}
 				</div>
-				<div className={classes.total}>
+				<div className={cartStyles.total}>
 					<span>Total: </span>
 					<span>200$</span>
 				</div>
-				<div className={classes.checkoutBtns}>
-					<button className={classes.showCartBtn}>view bag</button>
-					<button className={classes.checkoutBtn}>checkout</button>
+				<div className={cartStyles.checkoutBtns}>
+					<button className={cartStyles.showCartBtn}>view bag</button>
+					<button className={cartStyles.checkoutBtn}>checkout</button>
 				</div>
 			</div>
 		);
