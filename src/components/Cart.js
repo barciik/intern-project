@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { addToCart } from '../store';
 import cartStyles from './Cart.module.css';
+import { Link } from 'react-router-dom';
 
 const DUMMY_ITEMS = [
 	{
 		name: 'test1',
 		id: 'test1',
-		img: './woman-4820889_1280.jpg',
+		gallery: ['./woman-4820889_1280.jpg'],
 		attributes: [
 			{
 				id: 'size',
@@ -23,12 +26,12 @@ const DUMMY_ITEMS = [
 		color: 'blue',
 		availableColors: ['blue', 'red', 'green'],
 		price: '50$',
-		itemCount: '1',
+		quantity: '1',
 	},
 	{
 		name: 'test2',
 		id: 'test2',
-		img: './one-3054354_1280.jpg',
+		gallery: ['./one-3054354_1280.jpg'],
 		attributes: [
 			{
 				id: 'size',
@@ -41,79 +44,32 @@ const DUMMY_ITEMS = [
 				items: ['blue', 'red', 'green'],
 			},
 		],
-		price: '13$',
-		itemCount: '2',
-	},
-	{
-		name: 'test2',
-		id: 'test2',
-		img: './one-3054354_1280.jpg',
-		attributes: [
-			{
-				id: 'size',
-				name: 'size',
-				items: ['XS', 'S', 'M', 'L'],
-			},
-			{
-				id: 'color',
-				name: 'color',
-				items: ['blue', 'red', 'green'],
-			},
-		],
-		price: '13$',
-		itemCount: '2',
-	},
-	{
-		name: 'test2',
-		id: 'test2',
-		img: './one-3054354_1280.jpg',
-		attributes: [
-			{
-				id: 'size',
-				name: 'size',
-				items: ['XS', 'S', 'M', 'L'],
-			},
-			{
-				id: 'color',
-				name: 'color',
-				items: ['blue', 'red', 'green'],
-			},
-		],
-		price: '13$',
-		itemCount: '2',
+		prices: [{ amount: '13', currencies: { symbol: '$' } }],
+		quantity: '2',
 	},
 ];
 
-export default class Cart extends Component {
+
+
+class Cart extends Component {
 	render() {
 		return (
 			<div className={cartStyles.cartBody}>
 				<h3>My bag, {DUMMY_ITEMS.length} items</h3>
 				<div className={cartStyles.cartItems}>
-					{DUMMY_ITEMS.map((item) => {
+                    {console.log(this.props.cart)}
+					{this.props.cart.map((item) => {
 						return (
 							<div key={item.id} className={cartStyles.cartItem}>
 								<div className={cartStyles.itemInfo}>
 									<h4>{item.name}</h4>
-									<p>{item.price}</p>
+                                    {console.log(item, this.props.currency)}
+									<p>{this.props.currency}{item.prices.find(el => el.currency.symbol === this.props.currency).amount * item.quantity}</p>
+                                    <div className={cartStyles.attrBox}>
+
 									{item.attributes &&
 										item.attributes.map((el) => {
-											if (el.id === 'size') {
-												return (
-													<div key={el.id} className={cartStyles.attributes}>
-														<p>Size: </p>
-														<div className={cartStyles.sizes}>
-															{el.items.map((attr) => {
-																return (
-																	<p key={attr} className={cartStyles.size}>
-																		{attr}
-																	</p>
-																);
-															})}
-														</div>
-													</div>
-												);
-											} else if (el.id === 'color') {
+											if (el.id.toLowerCase() === 'color') {
 												return (
 													<div key={el.id} className={cartStyles.attributes}>
 														<p>Color: </p>
@@ -121,37 +77,45 @@ export default class Cart extends Component {
 															{el.items.map((attr) => {
 																return (
 																	<div
-																		key={attr}
+																		key={attr.value}
 																		className={cartStyles.color}
-																		style={{ backgroundColor: `${attr}` }}
+																		style={{ backgroundColor: `${attr.value}` }}
 																	></div>
 																);
 															})}
 														</div>
 													</div>
 												);
-											}
-											return (
-												<div key={el.id} className={cartStyles.attributes}>
-													{el.items.map((attr) => {
-														return (
-															<div className={cartStyles.attribute} key={attr}>
-																<p>{attr}</p>
-															</div>
-														);
-													})}
-												</div>
-											);
+											} else {
+												return (
+													<div key={el.id} className={cartStyles.attributes}>
+														<p>{el.id}: </p>
+														<div className={cartStyles.sizes}>
+															{el.items.map((attr) => {
+																return (
+																	<p key={attr.value} className={cartStyles.size}>
+																		{attr.value}
+																	</p>
+																);
+															})}
+														</div>
+													</div>
+												);
+											} 
+											
 										})}
+                                    </div>
 								</div>
 								<div className={cartStyles.cartButtons}>
-									<button>+</button>
-									<p>{item.itemCount}</p>
+									<button onClick={() => {
+                                        this.props.addToCart(item)
+                                    }}>+</button>
+									<p>{item.quantity}</p>
 									<button>-</button>
 								</div>
 								<img
 									className={cartStyles.itemImg}
-									src={item.img}
+									src={item.gallery[0]}
 									alt={item.name}
 								></img>
 							</div>
@@ -160,10 +124,10 @@ export default class Cart extends Component {
 				</div>
 				<div className={cartStyles.total}>
 					<span>Total: </span>
-					<span>200$</span>
+					<span>{this.props.cart.forEach(el => el.prices.find(el => el.currency.symbol === this.props.currency).amount)}{this.props.currency}</span>
 				</div>
 				<div className={cartStyles.checkoutBtns}>
-					<button className={cartStyles.showCartBtn}>view bag</button>
+					<Link><button className={cartStyles.showCartBtn}>view bag</button></Link>
 					<button className={cartStyles.checkoutBtn}>checkout</button>
 				</div>
 			</div>
@@ -171,3 +135,11 @@ export default class Cart extends Component {
 	}
 }
 
+const mapStateToProps = (state) => ({
+    cart: state.cart.cart,
+    currency: state.cart.currency,
+})
+
+const mapDispatchToProps = {addToCart}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Cart)

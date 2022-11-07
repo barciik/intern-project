@@ -12,6 +12,9 @@ import { onError } from '@apollo/client/link/error';
 import ItemsPage from './components/ItemsPage';
 import ItemPage from './components/ItemPage';
 import { Component } from 'react';
+import { connect } from 'react-redux';
+import { showCart } from './store';
+import Checkout from './components/Checkout';
 
 const errorLink = onError(({ graphqlErrors, networkError }) => {
 	if (graphqlErrors) {
@@ -28,25 +31,32 @@ const client = new ApolloClient({
 	link: link,
 });
 
+
+
 export class App extends Component {
 	render() {
 		return (
 			<ApolloProvider client={client}>
 				<div className='wrapper'>
-					<div className='shadow'></div>
+					{this.props.cartIsVisible && <div onClick={() => {this.props.showCart()}} className='shadow'></div>}
 					<Navigation />
 					<Switch>
+						{/* add dynamic routing*/}
 						<Route path='/all' exact>
-							<ItemsPage category='All' index='0' />
+							<ItemsPage category='All' />
 						</Route>
 						<Route path='/tech' exact>
-							<ItemsPage category='Tech' index='2' />
+							<ItemsPage category='Tech' />
 						</Route>
-
 						<Route path='/clothes' exact>
-							<ItemsPage category='Clothes' index='1' />
+							<ItemsPage category='Clothes' />
 						</Route>
-            <Route path="/:id" children={<ItemPage />} />
+						<Route path='/:id'>
+              <ItemPage />
+            </Route>
+            <Route path='/checkout'>
+              <Checkout />
+            </Route>
 					</Switch>
 				</div>
 			</ApolloProvider>
@@ -54,4 +64,10 @@ export class App extends Component {
 	}
 }
 
-export default App;
+const mapStateToProps = (state) => ({
+	cartIsVisible: state.cart.cartIsVisible,
+});
+
+const mapDispatchToProps = {showCart}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -4,6 +4,8 @@ import Cart from './Cart';
 import classes from './Navigation.module.css';
 import { getCategories } from '../GraphQL/Queries';
 import { graphql } from '@apollo/client/react/hoc';
+import { changeCurrency, showDropdown, showCart } from '../store/index';
+import { connect } from 'react-redux';
 
 let activeStyle = {
 	borderBottom: '2px solid #5ECE7B',
@@ -11,39 +13,6 @@ let activeStyle = {
 };
 
 class Navigation extends Component {
-	constructor() {
-		super();
-		this.state = {
-			showCart: false,
-			selectedCurrency: '$',
-			dropdownVisible: false,
-		};
-	}
-
-	showCart() {
-		this.setState(() => {
-			return {
-				showCart: !this.state.showCart,
-				dropdownVisible: false
-			};
-		});
-	}
-
-	showDropdown() {
-		this.setState(() => {
-			return {
-				dropdownVisible: !this.state.dropdownVisible,
-				showCart: false
-			};
-		});
-	}
-
-	selectCurrency(el) {
-		this.setState({
-			selectedCurrency: el
-		});
-	}
-
 	displayCategories() {
 		const data = this.props.data;
 		if (data.loading) {
@@ -71,9 +40,12 @@ class Navigation extends Component {
 		} else if (!data.loading) {
 			return data.currencies.map((item) => {
 				return (
-					<li key={item.label} onClick={() => {
-						this.selectCurrency(item.symbol)
-					}}>
+					<li
+						key={item.label}
+						onClick={() => {
+							this.props.changeCurrency(item.symbol);
+						}}
+					>
 						{item.symbol} {item.label}
 					</li>
 				);
@@ -93,25 +65,42 @@ class Navigation extends Component {
 				<div className={classes.cartArea}>
 					<div
 						className={classes.selectedCurrency}
-						onClick={this.showDropdown.bind(this)}
+						onClick={() => {
+							this.props.showDropdown();
+						}}
 					>
-						{this.state.selectedCurrency}
+						{this.props.currency}
 						<img className={classes.vector} src='./Vector.svg' alt='vector' />
-						{this.state.dropdownVisible && (
+						{this.props.dropDownIsVisible && (
 							<ul id='currency' className={classes.currencySwitcher}>
 								{this.displayCurrencies()}
 							</ul>
 						)}
 					</div>
 
-					<button onClick={this.showCart.bind(this)} className={classes.cart}>
+					<button
+						onClick={() => {
+							this.props.showCart();
+						}}
+						className={classes.cart}
+					>
 						<img src='./cart.svg' alt='cart' />
 					</button>
-					{this.state.showCart && <Cart />}
+					{this.props.cartIsVisible && <Cart />}
 				</div>
 			</div>
 		);
 	}
 }
 
-export default graphql(getCategories)(Navigation);
+const mapStateToProps = (state) => ({
+	currency: state.cart.currency,
+	cartIsVisible: state.cart.cartIsVisible,
+	dropDownIsVisible: state.cart.dropDownIsVisible,
+});
+
+const mapDispatchToProps = { changeCurrency, showDropdown, showCart };
+
+export default graphql(getCategories)(
+	connect(mapStateToProps, mapDispatchToProps)(Navigation)
+);

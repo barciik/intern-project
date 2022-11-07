@@ -13,6 +13,11 @@ export const getItemsQuery = gql`
 				attributes {
 					id
 					name
+					items {
+						displayValue
+						value
+						id
+					}
 				}
 				prices {
 					currency {
