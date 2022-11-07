@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addToCart, removeFromCart } from '../store';
+import { addToCart, removeFromCart, showCart } from '../store';
 import cartStyles from './Cart.module.css';
 import { Link } from 'react-router-dom';
 
@@ -99,8 +99,8 @@ class Cart extends Component {
 					</span>
 				</div>
 				<div className={cartStyles.checkoutBtns}>
-					<Link>
-						<button className={cartStyles.showCartBtn}>view bag</button>
+					<Link to='/checkout'>
+						<button className={cartStyles.showCartBtn} onClick={() => {this.props.showCart()}}>view bag</button>
 					</Link>
 					<button className={cartStyles.checkoutBtn}>checkout</button>
 				</div>
@@ -114,6 +114,6 @@ const mapStateToProps = (state) => ({
 	currency: state.cart.currency,
 });
 
-const mapDispatchToProps = { addToCart, removeFromCart };
+const mapDispatchToProps = { addToCart, removeFromCart, showCart };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);

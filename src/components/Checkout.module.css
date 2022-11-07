@@ -1,0 +1,177 @@
+.cartBody {
+	background-color: #fff;
+	width: 100%;
+	height: 100vp;
+	padding-top: 4rem;
+}
+
+.cartItems {
+	display: flex;
+	flex-direction: column;
+	margin-top: 4rem;
+}
+
+.cartItem {
+	display: flex;
+	justify-content: space-between;
+	min-height: 337px;
+	border-top: 1px solid #e5e5e5;
+}
+
+.cartItem:last-child {
+	border-bottom: 1px solid #e5e5e5;
+}
+
+.itemInfo {
+	display: flex;
+	flex-direction: column;
+	justify-content: start;
+	gap: 1rem;
+	padding: 1rem;
+}
+
+.rightInfo {
+	display: flex;
+	min-height: 337px;
+	padding: 1rem;
+}
+
+.name {
+	font-weight: 600;
+	font-size: 30px;
+}
+
+.brand {
+	font-weight: 400;
+	font-size: 30px;
+}
+
+.title {
+	font-weight: 700;
+	font-size: 32px;
+}
+
+.price {
+	font-weight: 700;
+	font-size: 24px;
+}
+
+.attrBox {
+	display: flex;
+	flex-direction: column;
+}
+
+.attributes {
+	margin-bottom: 1rem;
+}
+.attrTitle {
+	font-family: 'Roboto Condensed';
+	font-style: normal;
+	font-weight: 700;
+	font-size: 18px;
+}
+
+.sizes,
+.colors {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.size,
+.color {
+	margin-top: 0.5rem;
+	margin-right: 0.5rem;
+}
+
+.size {
+	border: 1px solid #1d1f22;
+	/* width: 24px;
+	height: 24px; */
+	text-align: center;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 160%;
+	transition: color 0.3s, background-color 0.3s;
+	cursor: pointer;
+	padding: 0.2rem 0.5rem;
+}
+
+.size:hover {
+	background-color: #000;
+	color: #fff;
+}
+
+.color {
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
+	padding: 2px;
+}
+
+.color:hover {
+	border: 1px solid #5ece7b;
+}
+
+.cartButtons {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.cartButtons button {
+	border: 1px solid #1d1f22;
+	background: none;
+	width: 2rem;
+	height: 2rem;
+	margin: 0 0.3rem;
+	transition: background 0.3s, color 0.3s;
+}
+
+.cartButtons button:hover {
+	background: #1d1f22;
+	color: #fff;
+}
+
+.itemImg {
+	/* aspect-ratio: 1/2; */
+	height: 100%;
+	display: flex;
+	align-items: center;
+}
+
+.itemImg img {
+	width: 200px;
+}
+
+.priceInfo {
+	padding: 1.5rem 0;
+}
+
+.total,
+.tax,
+.quantity {
+	margin-top: 1rem;
+	font-weight: 400;
+	font-size: 24px;
+}
+
+.total span, .tax span, .quantity span {
+    font-weight: 700;
+}
+
+.total {
+	margin-bottom: 1rem;
+}
+
+.orderBtn {
+	background-color: #5ece7b;
+	border: none;
+	color: #fff;
+	text-transform: uppercase;
+	/* padding: 16px 32px; */
+	width: 279px;
+	height: 43px;
+	font-size: 14px;
+	font-family: inherit;
+}

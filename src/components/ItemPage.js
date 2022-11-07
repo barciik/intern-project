@@ -16,11 +16,6 @@ class ItemPage extends Component {
 			selected: {},
 		};
 	}
-	changeImg(e) {
-		this.setState({
-			imgIndex: e,
-		});
-	}
 
 	selectAttribute(atr, val) {
 		this.setState((prev) => {
@@ -28,10 +23,6 @@ class ItemPage extends Component {
 				selectedAttributes: { ...prev.selectedAttributes, [atr]: val },
 			};
 		});
-	}
-
-	addItem(e) {
-		console.log(this.state.selectedAttributes);
 	}
 
 	displayItem() {

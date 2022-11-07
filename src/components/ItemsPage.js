@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { graphql } from '@apollo/client/react/hoc';
 import classes from './ItemsPage.module.css';
-import { getItemsQuery } from '../GraphQL/Queries';
+import { getProduct } from '../GraphQL/Queries';
 import ItemCard from './ItemCard';
 import { connect } from 'react-redux';
 import { changeCurrency } from '../store';
@@ -38,4 +38,4 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {changeCurrency}
 
-export default graphql(getItemsQuery)(connect(mapStateToProps, mapDispatchToProps)(ItemsPage));
+export default graphql(getProduct)(connect(mapStateToProps, mapDispatchToProps)(ItemsPage));

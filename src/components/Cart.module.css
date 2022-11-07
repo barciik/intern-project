@@ -70,6 +70,7 @@
 	height: 20px;
 	cursor: pointer;
 	padding: 2px;
+	border: 1px solid black;
 }
 
 .color:hover {

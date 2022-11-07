@@ -18,6 +18,11 @@ export const cartSlice = createSlice({
 		showCart(state) {
 			state.cartIsVisible = !state.cartIsVisible;
 			state.dropDownIsVisible = false;
+			if (state.cartIsVisible){
+				document.body.style.overflow = "hidden"
+			} else {
+				document.body.style.overflow = "visible"
+			}
 		},
 		showDropdown(state) {
 			state.dropDownIsVisible = !state.dropDownIsVisible;
@@ -31,7 +36,7 @@ export const cartSlice = createSlice({
 				state.totalQuantity += 1;
 				// existingItem.price += action.payload.prices.find(item => item.currency.symbol === state.currency).amount;
 			} else {
-				console.log(action.payload);
+				console.log(action.payload.brand);
 				state.totalQuantity += 1;
 				state.cart.push({
 					id: action.payload.id,
@@ -40,6 +45,7 @@ export const cartSlice = createSlice({
 					gallery: action.payload.gallery,
 					prices: action.payload.prices,
 					attributes: action.payload.attributes,
+					brand: action.payload.brand,
 					quantity: 1,
 				});
 			}
