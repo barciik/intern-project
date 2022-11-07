@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { graphql } from '@apollo/client/react/hoc';
 import { getProduct } from '../GraphQL/Queries';
 import { connect } from 'react-redux';
-import { addToCart } from '../store';
+import { addToCart, selectAttributes } from '../store';
 
 class ItemPage extends Component {
 	constructor() {
@@ -79,7 +79,7 @@ class ItemPage extends Component {
 														style={{ backgroundColor: `${val.value}` }}
 														className={itemPage.color}
 														onClick={() => {
-															this.selectAttribute(attr.id, val.value);
+															this.props.selectAttributes({id: attr.id,value: val.value, itemId: item.id});
 														}}
 													></div>
 												);
@@ -93,13 +93,13 @@ class ItemPage extends Component {
 									<p className={itemPage.attrTitle}>{attr.id}: </p>
 									<div key={attr.id} className={itemPage.attributes}>
 										{attr.items.map((val) => {
-											if (this.state.selectedAttributes[String(attr.id)] === val.id) {
+											if (true) {
 												return (
 													<div
 														key={val.value}
 														className={itemPage.attribute}
 														onClick={() => {
-															this.selectAttribute(attr.id, val.id);
+															this.props.selectAttributes({id: attr.id,value: val.value, itemId: item.id});
 														}}
 														style={{
 															background: '#1d1f22',
@@ -158,9 +158,10 @@ class ItemPage extends Component {
 
 const mapStateToProps = (state) => ({
 	currency: state.cart.currency,
+	selectedAttributes: state.cart.selectAttributes
 });
 
-const mapDispatchToProps = { addToCart };
+const mapDispatchToProps = { addToCart, selectAttributes };
 
 
 

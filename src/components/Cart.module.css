@@ -89,11 +89,25 @@
 	width: 2rem;
 	height: 2rem;
 	margin: 0 0.3rem;
+	transition: background .3s, color .3s;
+}
+
+.cartButtons button:hover {
+	background: #1D1F22;
+	color: #fff;
 }
 
 .itemImg {
 	/* aspect-ratio: 1/2; */
+	display: flex;
+	align-items: center;
     max-width: 40%;
+	height: 185px;
+}
+
+.itemImg img {
+	
+	width: 100%;
 }
 
 .total {

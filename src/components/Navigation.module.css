@@ -55,6 +55,7 @@
 
 .selectedCurrency {
 	margin-right: 1.5rem;
+	cursor: pointer;
 }
 
 .selectedCurrency img{
@@ -83,4 +84,5 @@
 
 .vector {
 	transform: rotate(180deg);
+	cursor: pointer;
 }
