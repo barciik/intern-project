@@ -4,6 +4,16 @@ import { addToCart, removeFromCart } from '../store';
 import checkoutStyles from './Checkout.module.css';
 
 class Checkout extends Component {
+	calculate() {
+		
+		let totalPrice = 0
+		for (let i = 0; i < this.props.cart.length; i++) {
+			console.log(this.props.cart[i].prices.find(el => el.currency.symbol === this.props.currency).amount)
+			totalPrice += this.props.cart[i].prices.find(el => el.currency.symbol === this.props.currency).amount
+		}
+		return totalPrice
+	}
+
 	render() {
 		return (
 			<div className={checkoutStyles.cartBody}>
@@ -105,21 +115,15 @@ class Checkout extends Component {
 				</div>
 				<div className={checkoutStyles.priceInfo}>
 					<p className={checkoutStyles.tax}>
-						Tax 21%: <span>{this.props.currency}42.00</span>
+						Tax 21%: <span>{this.props.currency}{(this.props.totalPrice / 100 * 21).toFixed(2)}</span>
 					</p>
 					<p className={checkoutStyles.quantity}>
-						Quantity: <span>3</span>
+						Quantity: <span>{}</span>
 					</p>
 					<p className={checkoutStyles.total}>
-						Total:
-						<span>
-							{this.props.cart.forEach(
-								(el) =>
-									el.prices.find(
-										(el) => el.currency.symbol === this.props.currency
-									).amount
-							)}
+						Total: <span>
 							{this.props.currency}
+							{this.props.totalPrice.toFixed(2)}
 						</span>
 					</p>
 					<button className={checkoutStyles.orderBtn}>ORDER</button>
@@ -132,6 +136,7 @@ class Checkout extends Component {
 const mapStateToProps = (state) => ({
 	cart: state.cart.cart,
 	currency: state.cart.currency,
+	totalPrice: state.cart.totalPrice
 });
 
 const mapDispatchToProps = { addToCart, removeFromCart };

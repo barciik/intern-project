@@ -9,19 +9,33 @@ export const cartSlice = createSlice({
 		cart: [],
 		selectedAttributes: [],
 		totalQuantity: 0,
+		totalPrice: 0,
+		priceArray: [],
 	},
 	reducers: {
 		changeCurrency(state, action) {
-			console.log(action);
 			state.currency = action.payload;
+			state.priceArray = [];
+			for (let i = 0; i < state.cart.length; i++) {
+				state.priceArray.push(
+					state.cart[i].prices.find(
+						(el) => el.currency.symbol === state.currency
+					).amount * state.cart[i].quantity
+				);
+			}
+			state.totalPrice = state.priceArray.reduce(
+				(partialSum, a) => partialSum + a,
+				0
+			);
+			// state.totalPrice = state.cart
 		},
 		showCart(state) {
 			state.cartIsVisible = !state.cartIsVisible;
 			state.dropDownIsVisible = false;
-			if (state.cartIsVisible){
-				document.body.style.overflow = "hidden"
+			if (state.cartIsVisible) {
+				document.body.style.overflow = 'hidden';
 			} else {
-				document.body.style.overflow = "visible"
+				document.body.style.overflow = 'visible';
 			}
 		},
 		showDropdown(state) {
@@ -31,6 +45,17 @@ export const cartSlice = createSlice({
 		addToCart(state, action) {
 			const id = action.payload.id;
 			const existingItem = state.cart.find((item) => item.id === id);
+
+			// state.priceArray = []
+			// for(let i = 0; i < state.cart.length; i++) {
+			// 	state.priceArray.push(state.cart[i].prices.find(el => el.currency.symbol === state.currency).amount)
+			// }
+			// state.totalPrice = state.priceArray.reduce((partialSum, a) => partialSum + a, 0).toFixed(2)
+
+			state.totalPrice += action.payload.prices.find(
+				(el) => el.currency.symbol === state.currency
+			).amount;
+
 			if (existingItem) {
 				existingItem.quantity++;
 				state.totalQuantity += 1;
@@ -49,11 +74,17 @@ export const cartSlice = createSlice({
 					quantity: 1,
 				});
 			}
-			console.log(current(state.cart));
 		},
 		removeFromCart(state, action) {
 			const id = action.payload.id;
 			const existingItem = state.cart.find((item) => item.id === id);
+			// for(let i = 0; i < state.cart.length; i++) {
+			// 	state.priceArray.push(state.cart[i].prices.find(el => el.currency.symbol === state.currency).amount)
+			// }
+			// state.totalPrice = state.priceArray.reduce((partialSum, a) => partialSum + a, 0).toFixed(2)
+			state.totalPrice -= action.payload.prices.find(
+				(el) => el.currency.symbol === state.currency
+			).amount;
 			if (existingItem.quantity === 1) {
 				state.cart = state.cart.filter((item) => item.id !== id);
 			} else {
@@ -63,26 +94,24 @@ export const cartSlice = createSlice({
 		selectAttributes(state, action) {
 			const id = action.payload.itemId;
 			const attrId = action.payload.id;
-			console.log(id, attrId);
 			const existingItem = state.selectedAttributes.find(
 				(item) => item.id === id
 			);
 			const existingAttr = state.selectedAttributes.find(
-				(item) => item.id === attrId
+				(item) => item.attributeId === attrId
 			);
-			if (existingItem) {
-				console.log(existingItem);
+			if (existingItem && existingItem.attributeId === action.payload.attributeId) {
 				existingItem.value = action.payload.value;
 				console.log(current(state.selectedAttributes));
 				return;
-			}
-			state.selectedAttributes.push({
-				[action.payload.itemId]: {
+			} else {
+				state.selectedAttributes.push({
 					id: action.payload.itemId,
 					attributeId: action.payload.id,
 					value: action.payload.value,
-				},
-			});
+				});
+			}
+
 			console.log(current(state.selectedAttributes));
 		},
 	},

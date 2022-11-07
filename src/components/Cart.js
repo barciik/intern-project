@@ -10,7 +10,6 @@ class Cart extends Component {
 			<div className={cartStyles.cartBody}>
 				<h3>My bag, {this.props.cart.length} items</h3>
 				<div className={cartStyles.cartItems}>
-					{console.log(this.props.cart)}
 					{this.props.cart.map((item) => {
 						return (
 							<div key={item.id} className={cartStyles.cartItem}>
@@ -18,9 +17,11 @@ class Cart extends Component {
 									<h4>{item.name}</h4>
 									<p>
 										{this.props.currency}
-										{(item.prices.find(
-											(el) => el.currency.symbol === this.props.currency
-										).amount * item.quantity).toFixed(2)}
+										{(
+											item.prices.find(
+												(el) => el.currency.symbol === this.props.currency
+											).amount * item.quantity
+										).toFixed(2)}
 									</p>
 									<div className={cartStyles.attrBox}>
 										{item.attributes &&
@@ -75,9 +76,13 @@ class Cart extends Component {
 										+
 									</button>
 									<p>{item.quantity}</p>
-									<button onClick={() => {
+									<button
+										onClick={() => {
 											this.props.removeFromCart(item);
-										}}>-</button>
+										}}
+									>
+										-
+									</button>
 								</div>
 								<div className={cartStyles.itemImg}>
 									<img src={item.gallery[0]} alt={item.name}></img>
@@ -89,18 +94,20 @@ class Cart extends Component {
 				<div className={cartStyles.total}>
 					<span>Total: </span>
 					<span>
-						{this.props.cart.forEach(
-							(el) =>
-								el.prices.find(
-									(el) => el.currency.symbol === this.props.currency
-								).amount
-						)}
 						{this.props.currency}
+						{this.props.totalPrice.toFixed(2)}
 					</span>
 				</div>
 				<div className={cartStyles.checkoutBtns}>
 					<Link to='/checkout'>
-						<button className={cartStyles.showCartBtn} onClick={() => {this.props.showCart()}}>view bag</button>
+						<button
+							className={cartStyles.showCartBtn}
+							onClick={() => {
+								this.props.showCart();
+							}}
+						>
+							view bag
+						</button>
 					</Link>
 					<button className={cartStyles.checkoutBtn}>checkout</button>
 				</div>
@@ -112,6 +119,7 @@ class Cart extends Component {
 const mapStateToProps = (state) => ({
 	cart: state.cart.cart,
 	currency: state.cart.currency,
+	totalPrice: state.cart.totalPrice
 });
 
 const mapDispatchToProps = { addToCart, removeFromCart, showCart };

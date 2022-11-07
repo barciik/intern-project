@@ -12,18 +12,11 @@ class ItemPage extends Component {
 
 		this.state = {
 			imgIndex: 0,
-			selectedAttributes: {},
-			selected: {},
+			
 		};
 	}
 
-	selectAttribute(atr, val) {
-		this.setState((prev) => {
-			return {
-				selectedAttributes: { ...prev.selectedAttributes, [atr]: val },
-			};
-		});
-	}
+	
 
 	displayItem() {
 		const data = this.props.data;
@@ -84,14 +77,15 @@ class ItemPage extends Component {
 									<p className={itemPage.attrTitle}>{attr.id}: </p>
 									<div key={attr.id} className={itemPage.attributes}>
 										{attr.items.map((val) => {
-											if (true) {
+											console.log(this.props.selectedAttributes)
+											if (this.props.selectedAttributes) {
 												return (
 													<div
 														key={val.value}
 														className={itemPage.attribute}
-														onClick={() => {
-															this.props.selectAttributes({id: attr.id,value: val.value, itemId: item.id});
-														}}
+														// onClick={() => {
+														// 	this.props.selectAttributes({id: attr.id,value: val.value, itemId: item.id});
+														// }}
 														style={{
 															background: '#1d1f22',
 															border: '1px solid #1d1f22',
@@ -107,7 +101,7 @@ class ItemPage extends Component {
 													key={val.value}
 													className={itemPage.attribute}
 													onClick={() => {
-														this.selectAttribute(attr.id, val.id);
+														this.props.selectAttributes({id: attr.id,value: val.value, itemId: item.id});
 													}}
 												>
 													{val.value}

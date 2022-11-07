@@ -25,7 +25,7 @@
 .itemInfo {
 	display: flex;
 	flex-direction: column;
-	justify-content: start;
+	justify-content: flex-start;
 	gap: 1rem;
 	padding: 1rem;
 }
@@ -81,6 +81,7 @@
 .color {
 	margin-top: 0.5rem;
 	margin-right: 0.5rem;
+	border: 1px solid #1d1f22;
 }
 
 .size {
