@@ -7,11 +7,6 @@ import { graphql } from '@apollo/client/react/hoc';
 import { changeCurrency, showDropdown, showCart } from '../store/index';
 import { connect } from 'react-redux';
 
-let activeStyle = {
-	borderBottom: '2px solid #5ECE7B',
-	color: '#5ECE7B',
-};
-
 class Navigation extends Component {
 	displayCategories() {
 		const data = this.props.data;
@@ -23,7 +18,10 @@ class Navigation extends Component {
 					<NavLink
 						className={classes.link}
 						to={item.name}
-						style={({ isActive }) => (isActive ? activeStyle : undefined)}
+						style={(isActive) => ({
+							borderBottom: isActive ? '2px solid #5ECE7B' : '',
+							color: isActive ? '#5ECE7B' : '',
+						})}
 						key={item.name}
 					>
 						{item.name}
@@ -97,9 +95,14 @@ const mapStateToProps = (state) => ({
 	currency: state.cart.currency,
 	cartIsVisible: state.cart.cartIsVisible,
 	dropDownIsVisible: state.cart.dropDownIsVisible,
+	categories: state.cart.categories,
 });
 
-const mapDispatchToProps = { changeCurrency, showDropdown, showCart };
+const mapDispatchToProps = {
+	changeCurrency,
+	showDropdown,
+	showCart,
+};
 
 export default graphql(getCategories)(
 	connect(mapStateToProps, mapDispatchToProps)(Navigation)

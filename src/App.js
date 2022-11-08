@@ -46,7 +46,9 @@ export class App extends Component {
 					)}
 					<Navigation />
 					<Switch>
-						{/* add dynamic routing*/}
+						<Route index path='/' exact>
+							<ItemsPage category='All' />
+						</Route>
 						<Route path='/all' exact>
 							<ItemsPage category='All' />
 						</Route>

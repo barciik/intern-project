@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addToCart, removeFromCart, selectAttributes } from '../store';
+import { addToCart, removeFromCart, selectAttributes, sendOrder } from '../store';
 import checkoutStyles from './Checkout.module.css';
 
 class Checkout extends Component {
@@ -37,24 +37,25 @@ class Checkout extends Component {
 															</p>
 															<div className={checkoutStyles.colors}>
 																{attr.items.map((val) => {
-                                  if(this.props.selectedAttributes.find(
-																		(el) =>
-																			el.id === item.id &&
-																			el.value === val.value &&
-																			el.attributeId === attr.id
-																	)) {
-                                    return (
-                                      <div
-																			key={val.value}
-																			className={checkoutStyles.color}
-																			style={{
-																				backgroundColor: `${val.value}`,
-                                        border: '2px solid #5ece7b'
-																			}}
-																		></div>
-                                    )
-                                  }
-                                  
+																	if (
+																		this.props.selectedAttributes.find(
+																			(el) =>
+																				el.id === item.id &&
+																				el.value === val.value &&
+																				el.attributeId === attr.id
+																		)
+																	) {
+																		return (
+																			<div
+																				key={val.value}
+																				className={checkoutStyles.color}
+																				style={{
+																					backgroundColor: `${val.value}`,
+																					border: '2px solid #5ece7b',
+																				}}
+																			></div>
+																		);
+																	}
 
 																	return (
 																		<div
@@ -63,13 +64,13 @@ class Checkout extends Component {
 																			style={{
 																				backgroundColor: `${val.value}`,
 																			}}
-                                      onClick={() => {
-                                        this.props.selectAttributes({
+																			onClick={() => {
+																				this.props.selectAttributes({
 																					id: attr.id,
 																					value: val.value,
 																					itemId: item.id,
-																				})
-                                      }}
+																				});
+																			}}
 																		></div>
 																	);
 																})}
@@ -87,37 +88,39 @@ class Checkout extends Component {
 															</p>
 															<div className={checkoutStyles.sizes}>
 																{attr.items.map((val) => {
-                                  if(this.props.selectedAttributes.find(
-																		(el) =>
-																			el.id === item.id &&
-																			el.value === val.value &&
-																			el.attributeId === attr.id
-																	)) {
-                                    return (
-                                      <p
-																			key={val.value}
-																			className={checkoutStyles.size}
-                                      style={{
-																				background: '#1d1f22',
-																				border: '1px solid #1d1f22',
-																				color: '#fff',
-																			}}
-																		>
-																			{val.value}
-																		</p>
-                                    )
-                                  }
+																	if (
+																		this.props.selectedAttributes.find(
+																			(el) =>
+																				el.id === item.id &&
+																				el.value === val.value &&
+																				el.attributeId === attr.id
+																		)
+																	) {
+																		return (
+																			<p
+																				key={val.value}
+																				className={checkoutStyles.size}
+																				style={{
+																					background: '#1d1f22',
+																					border: '1px solid #1d1f22',
+																					color: '#fff',
+																				}}
+																			>
+																				{val.value}
+																			</p>
+																		);
+																	}
 																	return (
 																		<p
 																			key={val.value}
 																			className={checkoutStyles.size}
-                                      onClick={() => {
-                                        this.props.selectAttributes({
+																			onClick={() => {
+																				this.props.selectAttributes({
 																					id: attr.id,
 																					value: val.value,
 																					itemId: item.id,
-																				})
-                                      }}
+																				});
+																			}}
 																		>
 																			{val.value}
 																		</p>
@@ -165,7 +168,7 @@ class Checkout extends Component {
 						</span>
 					</p>
 					<p className={checkoutStyles.quantity}>
-						Quantity: <span>{}</span>
+						Quantity: <span>{this.props.totalQuantity}</span>
 					</p>
 					<p className={checkoutStyles.total}>
 						Total:{' '}
@@ -174,7 +177,7 @@ class Checkout extends Component {
 							{this.props.totalPrice.toFixed(2)}
 						</span>
 					</p>
-					<button className={checkoutStyles.orderBtn}>ORDER</button>
+					<button className={checkoutStyles.orderBtn} onClick={() => {this.props.sendOrder()}}>ORDER</button>
 				</div>
 			</div>
 		);
@@ -185,9 +188,10 @@ const mapStateToProps = (state) => ({
 	cart: state.cart.cart,
 	currency: state.cart.currency,
 	totalPrice: state.cart.totalPrice,
-  selectedAttributes: state.cart.selectedAttributes
+	selectedAttributes: state.cart.selectedAttributes,
+	totalQuantity: state.cart.totalQuantity,
 });
 
-const mapDispatchToProps = { addToCart, removeFromCart, selectAttributes };
+const mapDispatchToProps = { addToCart, removeFromCart, selectAttributes, sendOrder };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Checkout);

@@ -86,8 +86,6 @@
 
 .size {
 	border: 1px solid #1d1f22;
-	/* width: 24px;
-	height: 24px; */
 	text-align: center;
 	font-size: 14px;
 	font-weight: 400;
@@ -135,7 +133,6 @@
 }
 
 .itemImg {
-	/* aspect-ratio: 1/2; */
 	height: 100%;
 	display: flex;
 	align-items: center;
@@ -170,9 +167,13 @@
 	border: none;
 	color: #fff;
 	text-transform: uppercase;
-	/* padding: 16px 32px; */
 	width: 279px;
 	height: 43px;
 	font-size: 14px;
 	font-family: inherit;
+	transition: background-color .3s;
+}
+
+.orderBtn:hover {
+	background-color: #58be74;
 }

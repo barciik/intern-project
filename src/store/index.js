@@ -11,6 +11,7 @@ export const cartSlice = createSlice({
 		totalQuantity: 0,
 		totalPrice: 0,
 		priceArray: [],
+		orderData: [],
 	},
 	reducers: {
 		changeCurrency(state, action) {
@@ -45,15 +46,15 @@ export const cartSlice = createSlice({
 			const id = action.payload.id;
 			const existingItem = state.cart.find((item) => item.id === id);
 
+			state.totalQuantity++;
+
 			state.totalPrice += action.payload.prices.find(
 				(el) => el.currency.symbol === state.currency
 			).amount;
 
 			if (existingItem) {
 				existingItem.quantity++;
-				state.totalQuantity += 1;
 			} else {
-				state.totalQuantity += 1;
 				state.cart.push({
 					id: action.payload.id,
 					name: action.payload.name,
@@ -63,12 +64,14 @@ export const cartSlice = createSlice({
 					attributes: action.payload.attributes,
 					brand: action.payload.brand,
 					quantity: 1,
+					categories: [],
 				});
 			}
 		},
 		removeFromCart(state, action) {
 			const id = action.payload.id;
 			const existingItem = state.cart.find((item) => item.id === id);
+			state.totalQuantity--;
 			state.totalPrice -= action.payload.prices.find(
 				(el) => el.currency.symbol === state.currency
 			).amount;
@@ -86,7 +89,6 @@ export const cartSlice = createSlice({
 			);
 			if (existingItem) {
 				existingItem.value = action.payload.value;
-				console.log(current(state.selectedAttributes));
 				return;
 			} else {
 				state.selectedAttributes.push({
@@ -95,7 +97,9 @@ export const cartSlice = createSlice({
 					value: action.payload.value,
 				});
 			}
-
+		},
+		sendOrder(state) {
+			console.log(current(state.cart));
 			console.log(current(state.selectedAttributes));
 		},
 	},
@@ -115,5 +119,6 @@ export const {
 	addToCart,
 	removeFromCart,
 	selectAttributes,
+	sendOrder,
 } = actions;
 export default reducer;

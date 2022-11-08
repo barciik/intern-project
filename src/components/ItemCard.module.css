@@ -9,14 +9,13 @@
 	cursor: pointer;
 }
 
+
 .card,
 .cardInactive {
 	position: relative;
 	width: 386px;
-	/* height: 444px; */
 	padding: 1rem 1rem 2rem;
 	margin-bottom: 5rem;
-
 	font-size: 18px;
 	transition: box-shadow 0.3s;
 }

@@ -15,6 +15,12 @@ class ItemPage extends Component {
 		};
 	}
 
+	changeImg(ind) {
+		this.setState({
+			imgIndex: ind
+		})
+	}
+
 	displayItem() {
 		const data = this.props.data;
 		if (data.loading) {
@@ -23,7 +29,7 @@ class ItemPage extends Component {
 			const item = data.categories[0].products.find(
 				(el) => el.id === this.props.match.params.id
 			);
-			// console.log(item);
+			
 			return (
 				<Fragment>
 					<div className={itemPage.imgSelector}>
@@ -33,7 +39,7 @@ class ItemPage extends Component {
 									src={photo}
 									key={photo}
 									alt={item.name}
-									onClick={() => this.changeImg(item.gallery.indexOf(photo))}
+									onClick={() => {this.changeImg(item.gallery.indexOf(photo))}}
 								/>
 							);
 						})}
@@ -109,9 +115,7 @@ class ItemPage extends Component {
 													<div
 														key={val.value}
 														className={itemPage.attribute}
-														// onClick={() => {
-														// 	this.props.selectAttributes({id: attr.id,value: val.value, itemId: item.id});
-														// }}
+														
 														style={{
 															background: '#1d1f22',
 															border: '1px solid #1d1f22',
@@ -164,7 +168,6 @@ class ItemPage extends Component {
 	render() {
 		return (
 			<div className={itemPage.itemPageBody}>
-				{/* {this.props.match.params.id} */}
 				{this.displayItem()}
 			</div>
 		);
