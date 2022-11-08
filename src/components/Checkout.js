@@ -1,19 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addToCart, removeFromCart } from '../store';
+import { addToCart, removeFromCart, selectAttributes } from '../store';
 import checkoutStyles from './Checkout.module.css';
 
 class Checkout extends Component {
-	calculate() {
-		
-		let totalPrice = 0
-		for (let i = 0; i < this.props.cart.length; i++) {
-			console.log(this.props.cart[i].prices.find(el => el.currency.symbol === this.props.currency).amount)
-			totalPrice += this.props.cart[i].prices.find(el => el.currency.symbol === this.props.currency).amount
-		}
-		return totalPrice
-	}
-
 	render() {
 		return (
 			<div className={checkoutStyles.cartBody}>
@@ -35,25 +25,51 @@ class Checkout extends Component {
 									</p>
 									<div className={checkoutStyles.attrBox}>
 										{item.attributes &&
-											item.attributes.map((el) => {
-												if (el.id.toLowerCase() === 'color') {
+											item.attributes.map((attr) => {
+												if (attr.id.toLowerCase() === 'color') {
 													return (
 														<div
-															key={el.id}
+															key={attr.id}
 															className={checkoutStyles.attributes}
 														>
 															<p className={checkoutStyles.attrTitle}>
 																Color:{' '}
 															</p>
 															<div className={checkoutStyles.colors}>
-																{el.items.map((attr) => {
-																	return (
-																		<div
-																			key={attr.value}
+																{attr.items.map((val) => {
+                                  if(this.props.selectedAttributes.find(
+																		(el) =>
+																			el.id === item.id &&
+																			el.value === val.value &&
+																			el.attributeId === attr.id
+																	)) {
+                                    return (
+                                      <div
+																			key={val.value}
 																			className={checkoutStyles.color}
 																			style={{
-																				backgroundColor: `${attr.value}`,
+																				backgroundColor: `${val.value}`,
+                                        border: '2px solid #5ece7b'
 																			}}
+																		></div>
+                                    )
+                                  }
+                                  
+
+																	return (
+																		<div
+																			key={val.value}
+																			className={checkoutStyles.color}
+																			style={{
+																				backgroundColor: `${val.value}`,
+																			}}
+                                      onClick={() => {
+                                        this.props.selectAttributes({
+																					id: attr.id,
+																					value: val.value,
+																					itemId: item.id,
+																				})
+                                      }}
 																		></div>
 																	);
 																})}
@@ -63,20 +79,47 @@ class Checkout extends Component {
 												} else {
 													return (
 														<div
-															key={el.id}
+															key={attr.id}
 															className={checkoutStyles.attributes}
 														>
 															<p className={checkoutStyles.attrTitle}>
-																{el.id}:{' '}
+																{attr.id}:{' '}
 															</p>
 															<div className={checkoutStyles.sizes}>
-																{el.items.map((attr) => {
+																{attr.items.map((val) => {
+                                  if(this.props.selectedAttributes.find(
+																		(el) =>
+																			el.id === item.id &&
+																			el.value === val.value &&
+																			el.attributeId === attr.id
+																	)) {
+                                    return (
+                                      <p
+																			key={val.value}
+																			className={checkoutStyles.size}
+                                      style={{
+																				background: '#1d1f22',
+																				border: '1px solid #1d1f22',
+																				color: '#fff',
+																			}}
+																		>
+																			{val.value}
+																		</p>
+                                    )
+                                  }
 																	return (
 																		<p
-																			key={attr.value}
+																			key={val.value}
 																			className={checkoutStyles.size}
+                                      onClick={() => {
+                                        this.props.selectAttributes({
+																					id: attr.id,
+																					value: val.value,
+																					itemId: item.id,
+																				})
+                                      }}
 																		>
-																			{attr.value}
+																			{val.value}
 																		</p>
 																	);
 																})}
@@ -115,13 +158,18 @@ class Checkout extends Component {
 				</div>
 				<div className={checkoutStyles.priceInfo}>
 					<p className={checkoutStyles.tax}>
-						Tax 21%: <span>{this.props.currency}{(this.props.totalPrice / 100 * 21).toFixed(2)}</span>
+						Tax 21%:{' '}
+						<span>
+							{this.props.currency}
+							{((this.props.totalPrice / 100) * 21).toFixed(2)}
+						</span>
 					</p>
 					<p className={checkoutStyles.quantity}>
 						Quantity: <span>{}</span>
 					</p>
 					<p className={checkoutStyles.total}>
-						Total: <span>
+						Total:{' '}
+						<span>
 							{this.props.currency}
 							{this.props.totalPrice.toFixed(2)}
 						</span>
@@ -136,9 +184,10 @@ class Checkout extends Component {
 const mapStateToProps = (state) => ({
 	cart: state.cart.cart,
 	currency: state.cart.currency,
-	totalPrice: state.cart.totalPrice
+	totalPrice: state.cart.totalPrice,
+  selectedAttributes: state.cart.selectedAttributes
 });
 
-const mapDispatchToProps = { addToCart, removeFromCart };
+const mapDispatchToProps = { addToCart, removeFromCart, selectAttributes };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Checkout);

@@ -12,11 +12,8 @@ class ItemPage extends Component {
 
 		this.state = {
 			imgIndex: 0,
-			
 		};
 	}
-
-	
 
 	displayItem() {
 		const data = this.props.data;
@@ -57,13 +54,36 @@ class ItemPage extends Component {
 										<p className={itemPage.attrTitle}>{attr.id}: </p>
 										<div key={attr.id} className={itemPage.attributes}>
 											{attr.items.map((val) => {
+												if (
+													this.props.selectedAttributes.find(
+														(el) =>
+															el.id === item.id &&
+															el.value === val.value &&
+															el.attributeId === attr.id
+													)
+												) {
+													return (
+														<div
+															key={val.value}
+															style={{
+																backgroundColor: `${val.value}`,
+																border: '2px solid #5ece7b',
+															}}
+															className={itemPage.color}
+														></div>
+													);
+												}
 												return (
 													<div
 														key={val.value}
 														style={{ backgroundColor: `${val.value}` }}
 														className={itemPage.color}
 														onClick={() => {
-															this.props.selectAttributes({id: attr.id,value: val.value, itemId: item.id});
+															this.props.selectAttributes({
+																id: attr.id,
+																value: val.value,
+																itemId: item.id,
+															});
 														}}
 													></div>
 												);
@@ -77,8 +97,14 @@ class ItemPage extends Component {
 									<p className={itemPage.attrTitle}>{attr.id}: </p>
 									<div key={attr.id} className={itemPage.attributes}>
 										{attr.items.map((val) => {
-											console.log(this.props.selectedAttributes)
-											if (this.props.selectedAttributes) {
+											if (
+												this.props.selectedAttributes.find(
+													(el) =>
+														el.id === item.id &&
+														el.value === val.value &&
+														el.attributeId === attr.id
+												)
+											) {
 												return (
 													<div
 														key={val.value}
@@ -101,7 +127,11 @@ class ItemPage extends Component {
 													key={val.value}
 													className={itemPage.attribute}
 													onClick={() => {
-														this.props.selectAttributes({id: attr.id,value: val.value, itemId: item.id});
+														this.props.selectAttributes({
+															id: attr.id,
+															value: val.value,
+															itemId: item.id,
+														});
 													}}
 												>
 													{val.value}
@@ -143,11 +173,11 @@ class ItemPage extends Component {
 
 const mapStateToProps = (state) => ({
 	currency: state.cart.currency,
-	selectedAttributes: state.cart.selectAttributes
+	selectedAttributes: state.cart.selectedAttributes,
 });
 
 const mapDispatchToProps = { addToCart, selectAttributes };
 
-
-
-export default withRouter(graphql(getProduct)(connect(mapStateToProps, mapDispatchToProps)(ItemPage)));
+export default withRouter(
+	graphql(getProduct)(connect(mapStateToProps, mapDispatchToProps)(ItemPage))
+);

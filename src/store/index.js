@@ -27,7 +27,6 @@ export const cartSlice = createSlice({
 				(partialSum, a) => partialSum + a,
 				0
 			);
-			// state.totalPrice = state.cart
 		},
 		showCart(state) {
 			state.cartIsVisible = !state.cartIsVisible;
@@ -46,12 +45,6 @@ export const cartSlice = createSlice({
 			const id = action.payload.id;
 			const existingItem = state.cart.find((item) => item.id === id);
 
-			// state.priceArray = []
-			// for(let i = 0; i < state.cart.length; i++) {
-			// 	state.priceArray.push(state.cart[i].prices.find(el => el.currency.symbol === state.currency).amount)
-			// }
-			// state.totalPrice = state.priceArray.reduce((partialSum, a) => partialSum + a, 0).toFixed(2)
-
 			state.totalPrice += action.payload.prices.find(
 				(el) => el.currency.symbol === state.currency
 			).amount;
@@ -59,9 +52,7 @@ export const cartSlice = createSlice({
 			if (existingItem) {
 				existingItem.quantity++;
 				state.totalQuantity += 1;
-				// existingItem.price += action.payload.prices.find(item => item.currency.symbol === state.currency).amount;
 			} else {
-				console.log(action.payload.brand);
 				state.totalQuantity += 1;
 				state.cart.push({
 					id: action.payload.id,
@@ -78,10 +69,6 @@ export const cartSlice = createSlice({
 		removeFromCart(state, action) {
 			const id = action.payload.id;
 			const existingItem = state.cart.find((item) => item.id === id);
-			// for(let i = 0; i < state.cart.length; i++) {
-			// 	state.priceArray.push(state.cart[i].prices.find(el => el.currency.symbol === state.currency).amount)
-			// }
-			// state.totalPrice = state.priceArray.reduce((partialSum, a) => partialSum + a, 0).toFixed(2)
 			state.totalPrice -= action.payload.prices.find(
 				(el) => el.currency.symbol === state.currency
 			).amount;
@@ -95,12 +82,9 @@ export const cartSlice = createSlice({
 			const id = action.payload.itemId;
 			const attrId = action.payload.id;
 			const existingItem = state.selectedAttributes.find(
-				(item) => item.id === id
+				(item) => item.id === id && item.attributeId === attrId
 			);
-			const existingAttr = state.selectedAttributes.find(
-				(item) => item.attributeId === attrId
-			);
-			if (existingItem && existingItem.attributeId === action.payload.attributeId) {
+			if (existingItem) {
 				existingItem.value = action.payload.value;
 				console.log(current(state.selectedAttributes));
 				return;

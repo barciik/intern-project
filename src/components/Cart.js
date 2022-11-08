@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addToCart, removeFromCart, showCart } from '../store';
+import {
+	addToCart,
+	removeFromCart,
+	showCart,
+	selectAttributes,
+} from '../store';
 import cartStyles from './Cart.module.css';
 import { Link } from 'react-router-dom';
 
@@ -25,19 +30,45 @@ class Cart extends Component {
 									</p>
 									<div className={cartStyles.attrBox}>
 										{item.attributes &&
-											item.attributes.map((el) => {
-												if (el.id.toLowerCase() === 'color') {
+											item.attributes.map((attr) => {
+												if (attr.id === 'Color') {
 													return (
-														<div key={el.id} className={cartStyles.attributes}>
+														<div key={attr.id} className={cartStyles.attributes}>
 															<p>Color: </p>
 															<div className={cartStyles.colors}>
-																{el.items.map((attr) => {
+																{attr.items.map((val) => {
+																	if (
+																		this.props.selectedAttributes.find(
+																			(el) =>
+																				el.id === item.id &&
+																				el.value === val.value &&
+																				el.attributeId === attr.id
+																		)
+																	) {
+																		return (
+																			<div
+																				key={val.value}
+																				className={cartStyles.color}
+																				style={{
+																					backgroundColor: `${val.value}`,
+																					border: '2px solid #5ece7b',
+																				}}
+																			></div>
+																		);
+																	}
 																	return (
 																		<div
-																			key={attr.value}
+																			key={val.value}
 																			className={cartStyles.color}
+																			onClick={() => {
+																				this.props.selectAttributes({
+																					id: attr.id,
+																					value: val.value,
+																					itemId: item.id,
+																				});
+																			}}
 																			style={{
-																				backgroundColor: `${attr.value}`,
+																				backgroundColor: `${val.value}`,
 																			}}
 																		></div>
 																	);
@@ -47,16 +78,43 @@ class Cart extends Component {
 													);
 												} else {
 													return (
-														<div key={el.id} className={cartStyles.attributes}>
-															<p>{el.id}: </p>
+														<div key={attr.id} className={cartStyles.attributes}>
+															<p>{attr.id}: </p>
 															<div className={cartStyles.sizes}>
-																{el.items.map((attr) => {
+																{attr.items.map((val) => {
+																	if(this.props.selectedAttributes.find(
+																		(el) =>
+																			el.id === item.id &&
+																			el.value === val.value &&
+																			el.attributeId === attr.id
+																	)){
+																		return (
+																			<p
+																			key={val.value}
+																			className={cartStyles.size}
+																			style={{
+																				background: '#1d1f22',
+																				border: '1px solid #1d1f22',
+																				color: '#fff',
+																			}}
+																			>	
+																			{val.value}
+																		</p>
+																		)
+																	}
 																	return (
 																		<p
-																			key={attr.value}
+																			key={val.value}
 																			className={cartStyles.size}
+																			onClick={() => {
+																				this.props.selectAttributes({
+																					id: attr.id,
+																					value: val.value,
+																					itemId: item.id,
+																				});
+																			}}
 																		>
-																			{attr.value}
+																			{val.value}
 																		</p>
 																	);
 																})}
@@ -119,9 +177,15 @@ class Cart extends Component {
 const mapStateToProps = (state) => ({
 	cart: state.cart.cart,
 	currency: state.cart.currency,
-	totalPrice: state.cart.totalPrice
+	totalPrice: state.cart.totalPrice,
+	selectedAttributes: state.cart.selectedAttributes,
 });
 
-const mapDispatchToProps = { addToCart, removeFromCart, showCart };
+const mapDispatchToProps = {
+	addToCart,
+	removeFromCart,
+	showCart,
+	selectAttributes,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);
