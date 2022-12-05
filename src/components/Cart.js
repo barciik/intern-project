@@ -16,7 +16,10 @@ class Cart extends Component {
 				<div className={cartStyles.cartItems}>
 					{this.props.cart.map((item) => {
 						return (
-							<div key={`${item.id} ${JSON.stringify(item.selectedAttributes)}`} className={cartStyles.cartItem}>
+							<div
+								key={`${item.id} ${JSON.stringify(item.selectedAttributes)}`}
+								className={cartStyles.cartItem}
+							>
 								<div className={cartStyles.itemInfo}>
 									<h4>{item.name}</h4>
 									<p className={cartStyles.price}>
@@ -70,15 +73,6 @@ class Cart extends Component {
 																			key={val.value}
 																			className={cartStyles.color}
 																			style={{ background: `${val.value}` }}
-																			// onClick={() => {
-																			// 	this.setAttribute({
-																			// 		id: attr.name,
-																			// 		value: val.value,
-																			// 		itemId: item.id,
-																			// 		selectedAttributes:
-																			// 			item.selectedAttributes,
-																			// 	});
-																			// }}
 																		></div>
 																	);
 																}
@@ -86,15 +80,6 @@ class Cart extends Component {
 																	<div
 																		key={val.value}
 																		className={cartStyles.attribute}
-																		// onClick={() => {
-																		// 	this.setAttribute({
-																		// 		id: attr.name,
-																		// 		value: val.value,
-																		// 		itemId: item.id,
-																		// 		selectedAttributes:
-																		// 			item.selectedAttributes,
-																		// 	});
-																		// }}
 																	>
 																		{val.value}
 																	</div>

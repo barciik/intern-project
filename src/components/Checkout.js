@@ -15,10 +15,7 @@ class Checkout extends Component {
 				<div className={checkoutStyles.cartItems}>
 					{this.props.cart.map((item) => {
 						return (
-							<div
-								key={item.id}
-								className={checkoutStyles.cartItem}
-							>
+							<div key={item.id} className={checkoutStyles.cartItem}>
 								<div className={checkoutStyles.itemInfo}>
 									<h4 className={checkoutStyles.name}>{item.name}</h4>
 									<h5 className={checkoutStyles.brand}>{item.brand}</h5>
@@ -74,15 +71,6 @@ class Checkout extends Component {
 																		key={val.value}
 																		className={checkoutStyles.color}
 																		style={{ background: `${val.value}` }}
-																		// onClick={() => {
-																		// 	this.setAttribute({
-																		// 		id: attr.name,
-																		// 		value: val.value,
-																		// 		itemId: item.id,
-																		// 		selectedAttributes:
-																		// 			item.selectedAttributes,
-																		// 	});
-																		// }}
 																	></div>
 																);
 															}
@@ -90,15 +78,6 @@ class Checkout extends Component {
 																<div
 																	key={val.value}
 																	className={checkoutStyles.attribute}
-																	// onClick={() => {
-																	// 	this.setAttribute({
-																	// 		id: attr.name,
-																	// 		value: val.value,
-																	// 		itemId: item.id,
-																	// 		selectedAttributes:
-																	// 			item.selectedAttributes,
-																	// 	});
-																	// }}
 																>
 																	{val.value}
 																</div>

@@ -9,7 +9,6 @@
 	cursor: pointer;
 }
 
-
 .card,
 .cardInactive {
 	position: relative;
@@ -35,7 +34,8 @@
 	font-weight: 500;
 }
 
-.card:hover, .cardInactive:hover {
+.card:hover,
+.cardInactive:hover {
 	box-shadow: 0px 4px 35px rgba(168, 172, 176, 0.19);
 }
 

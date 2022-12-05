@@ -12,7 +12,7 @@ export const cartSlice = createSlice({
 		totalPrice: 0,
 		priceArray: [],
 		orderData: [],
-		errorMessage: ''
+		errorMessage: '',
 	},
 	reducers: {
 		changeCurrency(state, action) {
@@ -45,14 +45,22 @@ export const cartSlice = createSlice({
 		},
 		addToCart(state, action) {
 			const id = action.payload.id;
-			const existingItem = state.cart.find((item) => item.id === id && JSON.stringify(item.selectedAttributes) === JSON.stringify(action.payload.selectedAttributes));
+			const existingItem = state.cart.find(
+				(item) =>
+					item.id === id &&
+					JSON.stringify(item.selectedAttributes) ===
+						JSON.stringify(action.payload.selectedAttributes)
+			);
 
-			if(action.payload.selectedAttributes.length !== action.payload.attributes.length) {
-				state.errorMessage = 'Select all attributes!'
-				window.scrollTo({top: 0, behavior: 'smooth'})
-				return
+			if (
+				action.payload.selectedAttributes.length !==
+				action.payload.attributes.length
+			) {
+				state.errorMessage = 'Select all attributes!';
+				window.scrollTo({ top: 0, behavior: 'smooth' });
+				return;
 			}
-			state.errorMessage = ''
+			state.errorMessage = '';
 			state.totalQuantity++;
 
 			state.totalPrice += action.payload.prices.find(
@@ -74,12 +82,16 @@ export const cartSlice = createSlice({
 					quantity: 1,
 					categories: [],
 				});
-				console.log(current(state.cart));
 			}
 		},
 		removeFromCart(state, action) {
 			const id = action.payload.id;
-			const existingItem = state.cart.find((item) => item.id === id && JSON.stringify(item.selectedAttributes) === JSON.stringify(action.payload.selectedAttributes));
+			const existingItem = state.cart.find(
+				(item) =>
+					item.id === id &&
+					JSON.stringify(item.selectedAttributes) ===
+						JSON.stringify(action.payload.selectedAttributes)
+			);
 			state.totalQuantity--;
 			state.totalPrice -= action.payload.prices.find(
 				(el) => el.currency.symbol === state.currency
@@ -90,17 +102,6 @@ export const cartSlice = createSlice({
 				existingItem.quantity--;
 			}
 		},
-		// setAttribute(state, action) {
-		// 	const existingItem = state.cart.find((item) => item.id === action.payload.itemId && JSON.stringify(item.selectedAttributes) === JSON.stringify(action.payload.selectedAttributes))
-		// 	const attribute = existingItem.selectedAttributes.find(item => item.id === action.payload.id)
-		// 	if(!existingItem.selectedAttributes.find(item => item.id === action.payload.id)){
-		// 		existingItem.selectedAttributes = [...existingItem.selectedAttributes, action.payload]
-		// 	} else {
-		// 		attribute.value = action.payload.value
-		// 	}
-			
-
-		// },
 		sendOrder(state) {
 			console.log(current(state.cart));
 		},
