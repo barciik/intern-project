@@ -1,40 +1,46 @@
-import { Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import './App.css';
 import Navigation from './components/Navigation';
-import {
-	ApolloClient,
-	InMemoryCache,
-	ApolloProvider,
-	HttpLink,
-	from,
-} from '@apollo/client';
-import { onError } from '@apollo/client/link/error';
 import ItemsPage from './components/ItemsPage';
 import ItemPage from './components/ItemPage';
-import { Component } from 'react';
+import { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { showCart } from './store';
 import Checkout from './components/Checkout';
-
-const errorLink = onError(({ graphqlErrors, networkError }) => {
-	if (graphqlErrors) {
-		graphqlErrors.map(({ message, location, path }) => {
-			return alert(`Graphql error ${message}`);
-		});
-	}
-});
-
-const link = from([errorLink, new HttpLink({ uri: 'http://localhost:4000/' })]);
-
-const client = new ApolloClient({
-	cache: new InMemoryCache(),
-	link: link,
-});
+import { graphql } from '@apollo/client/react/hoc';
+import { getCategories } from './GraphQL/Queries';
 
 export class App extends Component {
+	displayItems() {
+		const data = this.props.data;
+		if (data.loading) {
+			return <p>Loading...</p>;
+		} else if (!data.loading) {
+			const category = data.categories;
+			return (
+				<Switch>
+					{category.map((cat) => {
+						return (
+							<Route key={cat.name} path={`/${cat.name}`} exact>
+								<ItemsPage category={cat.name} />
+							</Route>
+						);
+					})}
+					<Route path='/checkout' exact>
+						<Checkout />
+					</Route>
+					<Route path='/:id'>
+						<ItemPage />
+					</Route>
+					<Redirect from='/' to='/all'></Redirect>
+				</Switch>
+			);
+		}
+	}
+
 	render() {
 		return (
-			<ApolloProvider client={client}>
+			<Fragment>
 				<div className='wrapper'>
 					{this.props.cartIsVisible && (
 						<div
@@ -45,28 +51,9 @@ export class App extends Component {
 						></div>
 					)}
 					<Navigation />
-					<Switch>
-						<Route index path='/' exact>
-							<ItemsPage category='All' />
-						</Route>
-						<Route path='/all' exact>
-							<ItemsPage category='All' />
-						</Route>
-						<Route path='/tech' exact>
-							<ItemsPage category='Tech' />
-						</Route>
-						<Route path='/clothes' exact>
-							<ItemsPage category='Clothes' />
-						</Route>
-						<Route path='/checkout' exact>
-							<Checkout />
-						</Route>
-						<Route path='/:id'>
-							<ItemPage />
-						</Route>
-					</Switch>
+					{this.displayItems()}
 				</div>
-			</ApolloProvider>
+			</Fragment>
 		);
 	}
 }
@@ -77,4 +64,6 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = { showCart };
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default graphql(getCategories)(
+	connect(mapStateToProps, mapDispatchToProps)(App)
+);

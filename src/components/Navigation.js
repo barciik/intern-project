@@ -83,6 +83,7 @@ class Navigation extends Component {
 						className={classes.cart}
 					>
 						<img src='./cart.svg' alt='cart' />
+						<div className={classes.cartCount}>{this.props.quantity}</div>
 					</button>
 					{this.props.cartIsVisible && <Cart />}
 				</div>
@@ -96,6 +97,7 @@ const mapStateToProps = (state) => ({
 	cartIsVisible: state.cart.cartIsVisible,
 	dropDownIsVisible: state.cart.dropDownIsVisible,
 	categories: state.cart.categories,
+	quantity: state.cart.totalQuantity,
 });
 
 const mapDispatchToProps = {

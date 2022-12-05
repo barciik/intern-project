@@ -9,7 +9,7 @@
 }
 
 .cartItems {
-	overflow: scroll;
+	overflow: auto;
 	max-height: 586px;
 }
 
@@ -27,15 +27,84 @@
 	gap: 1rem;
 }
 
+.price {
+	width: 52px;
+height: 26px;
+
+font-family: 'Raleway';
+font-style: normal;
+font-weight: 500;
+font-size: 16px;
+}
+
 .attrBox {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    height: 100%;
-    gap: 1rem;
+    /* height: 100%; */
+    gap: .4rem;
 }
 
-.sizes,
+.attributeLayout {
+	display: flex;
+	flex-direction: column;
+	gap: .2rem;
+}
+
+.attributes {
+	display: flex;
+	gap: 0.35rem;
+	margin-bottom: 1.5rem;
+	flex-wrap: wrap;
+}
+
+.attribute, .attributeSelected {
+	border: 1px solid #1d1f22;
+	padding: .3rem .4rem;
+	/* width: 43px;
+	height: 40px; */
+	text-align: center;
+	font-weight: 400;
+	/* line-height: 260%; */
+	cursor: pointer;
+	transition: color 0.3s, background-color 0.3s;
+	font-family: 'Source Sans Pro', sans-serif;
+	font-style: normal;
+	font-size: 16px;
+	color: #1d1f22;
+}
+
+.attributeSelected {
+	background: #1d1f22;
+	border: 1px solid #1d1f22;
+	color: #fff;
+}
+
+.attribute:hover {
+	background: #1d1f22;
+	border: 1px solid #1d1f22;
+	color: #fff;
+}
+
+.color {
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
+	border: 1px solid black;
+}
+
+.colorSelected {
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
+	border: 2px solid #5ece7b;
+}
+
+.color:hover {
+	border: 2px solid #5ece7b;
+}
+
+/* .sizes,
 .colors {
 	display: flex;
 	flex-wrap: wrap;
@@ -73,7 +142,7 @@
 
 .color:hover {
 	border: 1px solid #5ece7b;
-}
+} */
 
 .cartButtons {
 	display: flex;
@@ -112,6 +181,10 @@
 	display: flex;
 	justify-content: space-between;
 	margin-top: 1rem;
+
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
 }
 
 .checkoutBtns {

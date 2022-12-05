@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 
 import { graphql } from '@apollo/client/react/hoc';
 import classes from './ItemsPage.module.css';
-import { getProduct } from '../GraphQL/Queries';
 import ItemCard from './ItemCard';
 import { connect } from 'react-redux';
 import { changeCurrency } from '../store';
+import { getCategoryItems } from '../GraphQL/Queries';
 
 class ItemsPage extends Component {
 	displayItems() {
@@ -13,11 +13,16 @@ class ItemsPage extends Component {
 		if (data.loading) {
 			return <p>Loading...</p>;
 		} else if (!data.loading) {
-			return data.categories
-				.find((cat) => cat.name === this.props.category.toLowerCase())
-				.products.map((data) => {
-					return <ItemCard key={data.id} data={data} priceSymbol={this.props.currency}/>;
-				});
+			const category = data.category.products;
+			return category.map((item) => {
+				return (
+					<ItemCard
+						key={item.id}
+						data={item}
+						priceSymbol={this.props.currency}
+					/>
+				);
+			});
 		}
 	}
 
@@ -31,11 +36,18 @@ class ItemsPage extends Component {
 	}
 }
 
-
 const mapStateToProps = (state) => ({
-	currency: state.cart.currency
+	currency: state.cart.currency,
 });
 
-const mapDispatchToProps = {changeCurrency}
+const mapDispatchToProps = { changeCurrency };
 
-export default graphql(getProduct)(connect(mapStateToProps, mapDispatchToProps)(ItemsPage));
+export default graphql(getCategoryItems, {
+	options: (ownProps) => ({
+		variables: {
+			input: {
+				title: ownProps.category,
+			},
+		},
+	}),
+})(connect(mapStateToProps, mapDispatchToProps)(ItemsPage));

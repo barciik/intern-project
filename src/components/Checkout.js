@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addToCart, removeFromCart, selectAttributes, sendOrder } from '../store';
+import { addToCart, removeFromCart, setAttribute, sendOrder } from '../store';
 import checkoutStyles from './Checkout.module.css';
 
 class Checkout extends Component {
+	setAttribute(el) {
+		this.props.setAttribute(el);
+	}
+
 	render() {
 		return (
 			<div className={checkoutStyles.cartBody}>
@@ -11,7 +15,10 @@ class Checkout extends Component {
 				<div className={checkoutStyles.cartItems}>
 					{this.props.cart.map((item) => {
 						return (
-							<div key={item.id} className={checkoutStyles.cartItem}>
+							<div
+								key={`${item.id} ${Math.random()}`}
+								className={checkoutStyles.cartItem}
+							>
 								<div className={checkoutStyles.itemInfo}>
 									<h4 className={checkoutStyles.name}>{item.name}</h4>
 									<h5 className={checkoutStyles.brand}>{item.brand}</h5>
@@ -24,113 +31,83 @@ class Checkout extends Component {
 										).toFixed(2)}
 									</p>
 									<div className={checkoutStyles.attrBox}>
-										{item.attributes &&
-											item.attributes.map((attr) => {
-												if (attr.id.toLowerCase() === 'color') {
-													return (
-														<div
-															key={attr.id}
-															className={checkoutStyles.attributes}
-														>
-															<p className={checkoutStyles.attrTitle}>
-																Color:{' '}
-															</p>
-															<div className={checkoutStyles.colors}>
-																{attr.items.map((val) => {
-																	if (
-																		this.props.selectedAttributes.find(
-																			(el) =>
-																				el.id === item.id &&
-																				el.value === val.value &&
-																				el.attributeId === attr.id
-																		)
-																	) {
-																		return (
-																			<div
-																				key={val.value}
-																				className={checkoutStyles.color}
-																				style={{
-																					backgroundColor: `${val.value}`,
-																					border: '2px solid #5ece7b',
-																				}}
-																			></div>
-																		);
-																	}
-
+										{item.attributes.map((attr) => {
+											return (
+												<div
+													key={attr.name}
+													className={checkoutStyles.attributes}
+												>
+													<p className={checkoutStyles.attrTitle}>
+														{attr.name}:{' '}
+													</p>
+													<div className={checkoutStyles.sizes}>
+														{attr.items.map((val) => {
+															if (
+																item.selectedAttributes.find(
+																	(el) =>
+																		el.id === attr.name &&
+																		el.value === val.value &&
+																		el.itemId === item.id
+																)
+															) {
+																if (attr.type === 'swatch') {
 																	return (
 																		<div
 																			key={val.value}
-																			className={checkoutStyles.color}
-																			style={{
-																				backgroundColor: `${val.value}`,
-																			}}
-																			onClick={() => {
-																				this.props.selectAttributes({
-																					id: attr.id,
-																					value: val.value,
-																					itemId: item.id,
-																				});
-																			}}
+																			className={checkoutStyles.colorSelected}
+																			style={{ background: `${val.value}` }}
 																		></div>
 																	);
-																})}
-															</div>
-														</div>
-													);
-												} else {
-													return (
-														<div
-															key={attr.id}
-															className={checkoutStyles.attributes}
-														>
-															<p className={checkoutStyles.attrTitle}>
-																{attr.id}:{' '}
-															</p>
-															<div className={checkoutStyles.sizes}>
-																{attr.items.map((val) => {
-																	if (
-																		this.props.selectedAttributes.find(
-																			(el) =>
-																				el.id === item.id &&
-																				el.value === val.value &&
-																				el.attributeId === attr.id
-																		)
-																	) {
-																		return (
-																			<p
-																				key={val.value}
-																				className={checkoutStyles.size}
-																				style={{
-																					background: '#1d1f22',
-																					border: '1px solid #1d1f22',
-																					color: '#fff',
-																				}}
-																			>
-																				{val.value}
-																			</p>
-																		);
-																	}
-																	return (
-																		<p
-																			key={val.value}
-																			className={checkoutStyles.size}
-																			onClick={() => {
-																				this.props.selectAttributes({
-																					id: attr.id,
-																					value: val.value,
-																					itemId: item.id,
-																				});
-																			}}
-																		>
-																			{val.value}
-																		</p>
-																	);
-																})}
-															</div>
-														</div>
-													);
-												}
-											})}
+																}
+																return (
+																	<div
+																		key={val.value}
+																		className={checkoutStyles.attributeSelected}
+																	>
+																		{val.value}
+																	</div>
+																);
+															}
+															if (attr.type === 'swatch') {
+																return (
+																	<div
+																		key={val.value}
+																		className={checkoutStyles.color}
+																		style={{ background: `${val.value}` }}
+																		onClick={() => {
+																			this.setAttribute({
+																				id: attr.name,
+																				value: val.value,
+																				itemId: item.id,
+																				selectedAttributes:
+																					item.selectedAttributes,
+																			});
+																		}}
+																	></div>
+																);
+															}
+															return (
+																<div
+																	key={val.value}
+																	className={checkoutStyles.attribute}
+																	onClick={() => {
+																		this.setAttribute({
+																			id: attr.name,
+																			value: val.value,
+																			itemId: item.id,
+																			selectedAttributes:
+																				item.selectedAttributes,
+																		});
+																	}}
+																>
+																	{val.value}
+																</div>
+															);
+														})}
+													</div>
+												</div>
+											);
+										})}
 									</div>
 								</div>
 								<div className={checkoutStyles.rightInfo}>
@@ -177,7 +154,14 @@ class Checkout extends Component {
 							{this.props.totalPrice.toFixed(2)}
 						</span>
 					</p>
-					<button className={checkoutStyles.orderBtn} onClick={() => {this.props.sendOrder()}}>ORDER</button>
+					<button
+						className={checkoutStyles.orderBtn}
+						onClick={() => {
+							this.props.sendOrder();
+						}}
+					>
+						ORDER
+					</button>
 				</div>
 			</div>
 		);
@@ -192,6 +176,11 @@ const mapStateToProps = (state) => ({
 	totalQuantity: state.cart.totalQuantity,
 });
 
-const mapDispatchToProps = { addToCart, removeFromCart, selectAttributes, sendOrder };
+const mapDispatchToProps = {
+	addToCart,
+	removeFromCart,
+	setAttribute,
+	sendOrder,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Checkout);

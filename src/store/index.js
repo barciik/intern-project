@@ -44,7 +44,7 @@ export const cartSlice = createSlice({
 		},
 		addToCart(state, action) {
 			const id = action.payload.id;
-			const existingItem = state.cart.find((item) => item.id === id);
+			const existingItem = state.cart.find((item) => item.id === id && JSON.stringify(item.selectedAttributes) === JSON.stringify(action.payload.selectedAttributes));
 
 			state.totalQuantity++;
 
@@ -62,6 +62,7 @@ export const cartSlice = createSlice({
 					gallery: action.payload.gallery,
 					prices: action.payload.prices,
 					attributes: action.payload.attributes,
+					selectedAttributes: action.payload.selectedAttributes || [],
 					brand: action.payload.brand,
 					quantity: 1,
 					categories: [],
@@ -70,37 +71,30 @@ export const cartSlice = createSlice({
 		},
 		removeFromCart(state, action) {
 			const id = action.payload.id;
-			const existingItem = state.cart.find((item) => item.id === id);
+			const existingItem = state.cart.find((item) => item.id === id && JSON.stringify(item.selectedAttributes) === JSON.stringify(action.payload.selectedAttributes));
 			state.totalQuantity--;
 			state.totalPrice -= action.payload.prices.find(
 				(el) => el.currency.symbol === state.currency
 			).amount;
 			if (existingItem.quantity === 1) {
-				state.cart = state.cart.filter((item) => item.id !== id);
+				state.cart = state.cart.filter((item) => item !== existingItem);
 			} else {
 				existingItem.quantity--;
 			}
 		},
-		selectAttributes(state, action) {
-			const id = action.payload.itemId;
-			const attrId = action.payload.id;
-			const existingItem = state.selectedAttributes.find(
-				(item) => item.id === id && item.attributeId === attrId
-			);
-			if (existingItem) {
-				existingItem.value = action.payload.value;
-				return;
+		setAttribute(state, action) {
+			const existingItem = state.cart.find((item) => item.id === action.payload.itemId && JSON.stringify(item.selectedAttributes) === JSON.stringify(action.payload.selectedAttributes))
+			const attribute = existingItem.selectedAttributes.find(item => item.id === action.payload.id)
+			if(!existingItem.selectedAttributes.find(item => item.id === action.payload.id)){
+				existingItem.selectedAttributes = [...existingItem.selectedAttributes, action.payload]
 			} else {
-				state.selectedAttributes.push({
-					id: action.payload.itemId,
-					attributeId: action.payload.id,
-					value: action.payload.value,
-				});
+				attribute.value = action.payload.value
 			}
+			
+
 		},
 		sendOrder(state) {
 			console.log(current(state.cart));
-			console.log(current(state.selectedAttributes));
 		},
 	},
 });
@@ -118,7 +112,7 @@ export const {
 	showDropdown,
 	addToCart,
 	removeFromCart,
-	selectAttributes,
+	setAttribute,
 	sendOrder,
 } = actions;
 export default reducer;

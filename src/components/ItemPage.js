@@ -2,9 +2,10 @@ import React, { Component, Fragment } from 'react';
 import itemPage from './ItemPage.module.css';
 import { withRouter } from 'react-router-dom';
 import { graphql } from '@apollo/client/react/hoc';
-import { getProduct } from '../GraphQL/Queries';
 import { connect } from 'react-redux';
-import { addToCart, selectAttributes } from '../store';
+import { addToCart, setAttribute } from '../store';
+import parse from 'html-react-parser';
+import { getProduct } from '../GraphQL/Queries';
 
 class ItemPage extends Component {
 	constructor() {
@@ -12,13 +13,29 @@ class ItemPage extends Component {
 
 		this.state = {
 			imgIndex: 0,
+			selectedAttributes: [],
 		};
 	}
 
 	changeImg(ind) {
 		this.setState({
-			imgIndex: ind
-		})
+			imgIndex: ind,
+		});
+	}
+
+	setAttribute(attr) {
+		this.setState((prevState) => {
+			const existingAttribute = prevState.selectedAttributes.find(
+				(el) => el.id === attr.id && el.itemId === attr.itemId
+			);
+			if (existingAttribute) {
+				existingAttribute.value = attr.value;
+				return { selectedAttributes: [...prevState.selectedAttributes] };
+			}
+			return {
+				selectedAttributes: [...prevState.selectedAttributes, attr],
+			};
+		});
 	}
 
 	displayItem() {
@@ -26,10 +43,8 @@ class ItemPage extends Component {
 		if (data.loading) {
 			return <p>Loading...</p>;
 		} else if (!data.loading) {
-			const item = data.categories[0].products.find(
-				(el) => el.id === this.props.match.params.id
-			);
-			
+			const item = data.product;
+
 			return (
 				<Fragment>
 					<div className={itemPage.imgSelector}>
@@ -39,91 +54,70 @@ class ItemPage extends Component {
 									src={photo}
 									key={photo}
 									alt={item.name}
-									onClick={() => {this.changeImg(item.gallery.indexOf(photo))}}
+									onClick={() => {
+										this.changeImg(item.gallery.indexOf(photo));
+									}}
 								/>
 							);
 						})}
 					</div>
-					<img
-						className={itemPage.mainImg}
-						src={item.gallery[this.state.imgIndex]}
-						alt={item.name}
-					/>
+					<div className={itemPage.imgContainer}>
+						<img
+							className={itemPage.mainImg}
+							src={item.gallery[this.state.imgIndex]}
+							alt={item.name}
+						/>
+					</div>
 
 					<div className={itemPage.infoSection}>
 						<h2 className={itemPage.title}>{item.name}</h2>
 						<p className={itemPage.brand}>{item.brand}</p>
 						{item.attributes.map((attr) => {
-							if (attr.id === 'Color') {
-								return (
-									<Fragment key={attr.id}>
-										<p className={itemPage.attrTitle}>{attr.id}: </p>
-										<div key={attr.id} className={itemPage.attributes}>
-											{attr.items.map((val) => {
-												if (
-													this.props.selectedAttributes.find(
-														(el) =>
-															el.id === item.id &&
-															el.value === val.value &&
-															el.attributeId === attr.id
-													)
-												) {
+							return (
+								<Fragment key={attr.name}>
+									<p className={itemPage.attrTitle}>{attr.name}: </p>
+									<div key={attr.name} className={itemPage.attributes}>
+										{attr.items.map((val) => {
+											if (
+												this.state.selectedAttributes.find(
+													(el) =>
+														el.id === attr.name &&
+														el.value === val.value &&
+														el.itemId === item.id
+												)
+											) {
+												if (attr.type === 'swatch') {
 													return (
 														<div
 															key={val.value}
-															style={{
-																backgroundColor: `${val.value}`,
-																border: '2px solid #5ece7b',
-															}}
-															className={itemPage.color}
+															className={itemPage.colorSelected}
+															style={{ background: `${val.value}` }}
 														></div>
 													);
 												}
 												return (
 													<div
 														key={val.value}
-														style={{ backgroundColor: `${val.value}` }}
+														className={itemPage.attributeSelected}
+													>
+														{val.value}
+													</div>
+												);
+											}
+											if (attr.type === 'swatch') {
+												return (
+													<div
+														key={val.value}
 														className={itemPage.color}
+														style={{ background: `${val.value}` }}
 														onClick={() => {
-															this.props.selectAttributes({
-																id: attr.id,
+															this.setAttribute({
+																id: attr.name,
 																value: val.value,
 																itemId: item.id,
 															});
 														}}
 													></div>
-												);
-											})}
-										</div>
-									</Fragment>
-								);
-							}
-							return (
-								<Fragment key={attr.id}>
-									<p className={itemPage.attrTitle}>{attr.id}: </p>
-									<div key={attr.id} className={itemPage.attributes}>
-										{attr.items.map((val) => {
-											if (
-												this.props.selectedAttributes.find(
-													(el) =>
-														el.id === item.id &&
-														el.value === val.value &&
-														el.attributeId === attr.id
-												)
-											) {
-												return (
-													<div
-														key={val.value}
-														className={itemPage.attribute}
-														
-														style={{
-															background: '#1d1f22',
-															border: '1px solid #1d1f22',
-															color: '#fff',
-														}}
-													>
-														{val.value}
-													</div>
 												);
 											}
 											return (
@@ -131,8 +125,8 @@ class ItemPage extends Component {
 													key={val.value}
 													className={itemPage.attribute}
 													onClick={() => {
-														this.props.selectAttributes({
-															id: attr.id,
+														this.setAttribute({
+															id: attr.name,
 															value: val.value,
 															itemId: item.id,
 														});
@@ -148,39 +142,58 @@ class ItemPage extends Component {
 						})}
 						<span className={itemPage.attrTitle}>PRICE: </span>
 						<p className={itemPage.price}>
-							{item.prices[0].currency.symbol}
-							{item.prices[0].amount}
+							{this.props.currency}
+							{item.prices
+								.find((el) => el.currency.symbol === this.props.currency)
+								.amount.toFixed(2)}
 						</p>
-						<button
-							className={itemPage.addToCartBtn}
-							onClick={() => {
-								this.props.addToCart(item, this.state.selectedAttributes);
-							}}
-						>
-							ADD TO CART
-						</button>
-						<p className={itemPage.description}>{item.description}</p>
+						{item.inStock ? (
+							<button
+								className={itemPage.addToCartBtn}
+								onClick={() => {
+									const singleItem = {
+										...item,
+										selectedAttributes: this.state.selectedAttributes,
+									};
+									this.props.addToCart(singleItem);
+									this.setState({
+										selectedAttributes: [],
+									});
+								}}
+							>
+								ADD TO CART
+							</button>
+						) : (
+							<button className={itemPage.addToCartBtnDisabled}>
+								OUT OF STOCK
+							</button>
+						)}
+
+						<div className={itemPage.description}>
+							{parse(`${item.description}`)}
+						</div>
 					</div>
 				</Fragment>
 			);
 		}
 	}
 	render() {
-		return (
-			<div className={itemPage.itemPageBody}>
-				{this.displayItem()}
-			</div>
-		);
+		return <div className={itemPage.itemPageBody}>{this.displayItem()}</div>;
 	}
 }
 
 const mapStateToProps = (state) => ({
 	currency: state.cart.currency,
-	selectedAttributes: state.cart.selectedAttributes,
 });
 
-const mapDispatchToProps = { addToCart, selectAttributes };
+const mapDispatchToProps = { addToCart, setAttribute };
 
 export default withRouter(
-	graphql(getProduct)(connect(mapStateToProps, mapDispatchToProps)(ItemPage))
+	graphql(getProduct, {
+		options: (ownProps) => ({
+			variables: {
+				id: ownProps.match.params.id,
+			},
+		}),
+	})(connect(mapStateToProps, mapDispatchToProps)(ItemPage))
 );

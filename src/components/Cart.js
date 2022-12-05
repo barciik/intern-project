@@ -1,26 +1,28 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-	addToCart,
-	removeFromCart,
-	showCart,
-	selectAttributes,
-} from '../store';
+import { addToCart, removeFromCart, showCart, setAttribute } from '../store';
 import cartStyles from './Cart.module.css';
 import { Link } from 'react-router-dom';
 
 class Cart extends Component {
+	setAttribute(el) {
+		this.props.setAttribute(el);
+	}
+
 	render() {
 		return (
 			<div className={cartStyles.cartBody}>
-				<h3>My bag, {this.props.cart.length} items</h3>
+				<h3>My bag, {this.props.totalQuantity} items</h3>
 				<div className={cartStyles.cartItems}>
 					{this.props.cart.map((item) => {
 						return (
-							<div key={item.id} className={cartStyles.cartItem}>
+							<div
+								key={`${item.id} ${Math.random()}`}
+								className={cartStyles.cartItem}
+							>
 								<div className={cartStyles.itemInfo}>
 									<h4>{item.name}</h4>
-									<p>
+									<p className={cartStyles.price}>
 										{this.props.currency}
 										{(
 											item.prices.find(
@@ -31,104 +33,90 @@ class Cart extends Component {
 									<div className={cartStyles.attrBox}>
 										{item.attributes &&
 											item.attributes.map((attr) => {
-												if (attr.id === 'Color') {
-													return (
-														<div key={attr.id} className={cartStyles.attributes}>
-															<p>Color: </p>
-															<div className={cartStyles.colors}>
-																{attr.items.map((val) => {
-																	if (
-																		this.props.selectedAttributes.find(
-																			(el) =>
-																				el.id === item.id &&
-																				el.value === val.value &&
-																				el.attributeId === attr.id
-																		)
-																	) {
+												return (
+													<div
+														key={attr.name}
+														className={cartStyles.attributeLayout}
+													>
+														<p>{attr.name}: </p>
+														<div className={cartStyles.attributes}>
+															{attr.items.map((val) => {
+																if (
+																	item.selectedAttributes.find(
+																		(el) =>
+																			el.id === attr.name &&
+																			el.value === val.value &&
+																			el.itemId === item.id
+																	)
+																) {
+																	if (attr.type === 'swatch') {
 																		return (
 																			<div
 																				key={val.value}
-																				className={cartStyles.color}
-																				style={{
-																					backgroundColor: `${val.value}`,
-																					border: '2px solid #5ece7b',
-																				}}
+																				className={cartStyles.colorSelected}
+																				style={{ background: `${val.value}` }}
 																			></div>
 																		);
 																	}
 																	return (
 																		<div
 																			key={val.value}
+																			className={cartStyles.attributeSelected}
+																		>
+																			{val.value}
+																		</div>
+																	);
+																}
+																if (attr.type === 'swatch') {
+																	return (
+																		<div
+																			key={val.value}
 																			className={cartStyles.color}
+																			style={{ background: `${val.value}` }}
 																			onClick={() => {
-																				this.props.selectAttributes({
-																					id: attr.id,
+																				this.setAttribute({
+																					id: attr.name,
 																					value: val.value,
 																					itemId: item.id,
+																					selectedAttributes:
+																						item.selectedAttributes,
 																				});
-																			}}
-																			style={{
-																				backgroundColor: `${val.value}`,
 																			}}
 																		></div>
 																	);
-																})}
-															</div>
+																}
+																return (
+																	<div
+																		key={val.value}
+																		className={cartStyles.attribute}
+																		onClick={() => {
+																			this.setAttribute({
+																				id: attr.name,
+																				value: val.value,
+																				itemId: item.id,
+																				selectedAttributes:
+																					item.selectedAttributes,
+																			});
+																		}}
+																	>
+																		{val.value}
+																	</div>
+																);
+															})}
 														</div>
-													);
-												} else {
-													return (
-														<div key={attr.id} className={cartStyles.attributes}>
-															<p>{attr.id}: </p>
-															<div className={cartStyles.sizes}>
-																{attr.items.map((val) => {
-																	if(this.props.selectedAttributes.find(
-																		(el) =>
-																			el.id === item.id &&
-																			el.value === val.value &&
-																			el.attributeId === attr.id
-																	)){
-																		return (
-																			<p
-																			key={val.value}
-																			className={cartStyles.size}
-																			style={{
-																				background: '#1d1f22',
-																				border: '1px solid #1d1f22',
-																				color: '#fff',
-																			}}
-																			>	
-																			{val.value}
-																		</p>
-																		)
-																	}
-																	return (
-																		<p
-																			key={val.value}
-																			className={cartStyles.size}
-																			onClick={() => {
-																				this.props.selectAttributes({
-																					id: attr.id,
-																					value: val.value,
-																					itemId: item.id,
-																				});
-																			}}
-																		>
-																			{val.value}
-																		</p>
-																	);
-																})}
-															</div>
-														</div>
-													);
-												}
+													</div>
+												);
 											})}
 									</div>
 								</div>
 								<div className={cartStyles.cartButtons}>
 									<button
 										onClick={() => {
-											this.props.addToCart(item);
+											const product = {
+												...item,
+												selectedAttributes: item.selectedAttributes,
+											};
+											this.props.addToCart(product);
 										}}
 									>
 										+
@@ -136,7 +124,11 @@ class Cart extends Component {
 									<p>{item.quantity}</p>
 									<button
 										onClick={() => {
-											this.props.removeFromCart(item);
+											const product = {
+												...item,
+												selectedAttributes: item.selectedAttributes,
+											};
+											this.props.removeFromCart(product);
 										}}
 									>
 										-
@@ -179,13 +171,14 @@ const mapStateToProps = (state) => ({
 	currency: state.cart.currency,
 	totalPrice: state.cart.totalPrice,
 	selectedAttributes: state.cart.selectedAttributes,
+	totalQuantity: state.cart.totalQuantity,
 });
 
 const mapDispatchToProps = {
 	addToCart,
 	removeFromCart,
 	showCart,
-	selectAttributes,
+	setAttribute,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);

@@ -5,10 +5,6 @@ import { connect } from 'react-redux';
 import { changeCurrency, addToCart } from '../store';
 
 class ItemCard extends Component {
-	testMethod(e) {
-		console.log(e);
-	}
-
 	displayCards() {
 		const data = this.props.data;
 		const price = data.prices.find(
@@ -17,13 +13,16 @@ class ItemCard extends Component {
 		if (!data.inStock) {
 			return (
 				<div className={classes.cardInactive} key={data.id}>
-					<span className={classes.outOfStock}>out of stock</span>
-					<img src={data.gallery[0]} alt={data.name} />
-					<h3 className={classes.title}>{data.name}</h3>
-					<p className={classes.price}>
-						{price.currency.symbol}
-						{price.amount}
-					</p>
+					<Link className={classes.link} to={data.id}>
+						<span className={classes.outOfStock}>out of stock</span>
+						<img src={data.gallery[0]} alt={data.name} />
+						<h3 className={classes.title}>{data.name}</h3>
+						<p className={classes.price}>
+							{price.currency.symbol}
+							{price.amount}
+						</p>
+					</Link>
+
 					<button className={classes.addToCart}>
 						<img src='./add-to-cart.svg' alt='add to cart button' />
 					</button>
@@ -42,7 +41,8 @@ class ItemCard extends Component {
 				</Link>
 				<button
 					onClick={() => {
-						this.props.addToCart(data);
+						const product = { ...data, selectedAttributes: [] };
+						this.props.addToCart(product);
 					}}
 					className={classes.addToCart}
 				>
