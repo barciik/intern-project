@@ -59,6 +59,7 @@ class ItemCard extends Component {
 
 const mapStateToProps = (state) => ({
 	currency: state.cart.currency,
+	errorMessage: state.cart.errorMessage
 });
 
 const mapDispatchToProps = { changeCurrency, addToCart };

@@ -91,14 +91,14 @@
 	font-weight: 400;
 	line-height: 160%;
 	transition: color 0.3s, background-color 0.3s;
-	cursor: pointer;
+	/* cursor: pointer; */
 	padding: 0.2rem 0.5rem;
 }
 
-.attribute:hover {
+/* .attribute:hover {
 	background-color: #000;
 	color: #fff;
-}
+} */
 
 .attributeSelected {
 	text-align: center;
@@ -106,7 +106,7 @@
 	font-weight: 400;
 	line-height: 160%;
 	transition: color 0.3s, background-color 0.3s;
-	cursor: pointer;
+	/* cursor: pointer; */
 	padding: 0.2rem 0.5rem;
 	margin-top: 0.5rem;
 	margin-right: 0.5rem;
@@ -122,16 +122,16 @@
 	padding: 2px;
 }
 
-.color:hover {
+/* .color:hover {
 	border: 1px solid #5ece7b;
-}
+} */
 
 .colorSelected {
 	margin-top: 0.5rem;
 	margin-right: 0.5rem;
 	width: 20px;
 	height: 20px;
-	cursor: pointer;
+	/* cursor: pointer; */
 	padding: 2px;
 	border: 2px solid #5ece7b;
 }

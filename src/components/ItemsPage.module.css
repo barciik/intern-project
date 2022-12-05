@@ -19,3 +19,9 @@
 	flex-wrap: wrap;
     gap: 1rem;
 }
+
+.error {
+	margin-top: 2rem;
+	color: red;
+	font-size: 30px;
+}

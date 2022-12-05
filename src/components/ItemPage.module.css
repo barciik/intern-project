@@ -190,3 +190,8 @@
 .swatchAttr:hover {
 	border: 1px solid #5ece7b;
 }
+
+.error {
+	color: red;
+	font-size: 20px;
+}

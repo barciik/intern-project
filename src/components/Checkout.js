@@ -16,7 +16,7 @@ class Checkout extends Component {
 					{this.props.cart.map((item) => {
 						return (
 							<div
-								key={`${item.id} ${Math.random()}`}
+								key={item.id}
 								className={checkoutStyles.cartItem}
 							>
 								<div className={checkoutStyles.itemInfo}>
@@ -74,15 +74,15 @@ class Checkout extends Component {
 																		key={val.value}
 																		className={checkoutStyles.color}
 																		style={{ background: `${val.value}` }}
-																		onClick={() => {
-																			this.setAttribute({
-																				id: attr.name,
-																				value: val.value,
-																				itemId: item.id,
-																				selectedAttributes:
-																					item.selectedAttributes,
-																			});
-																		}}
+																		// onClick={() => {
+																		// 	this.setAttribute({
+																		// 		id: attr.name,
+																		// 		value: val.value,
+																		// 		itemId: item.id,
+																		// 		selectedAttributes:
+																		// 			item.selectedAttributes,
+																		// 	});
+																		// }}
 																	></div>
 																);
 															}
@@ -90,15 +90,15 @@ class Checkout extends Component {
 																<div
 																	key={val.value}
 																	className={checkoutStyles.attribute}
-																	onClick={() => {
-																		this.setAttribute({
-																			id: attr.name,
-																			value: val.value,
-																			itemId: item.id,
-																			selectedAttributes:
-																				item.selectedAttributes,
-																		});
-																	}}
+																	// onClick={() => {
+																	// 	this.setAttribute({
+																	// 		id: attr.name,
+																	// 		value: val.value,
+																	// 		itemId: item.id,
+																	// 		selectedAttributes:
+																	// 			item.selectedAttributes,
+																	// 	});
+																	// }}
 																>
 																	{val.value}
 																</div>

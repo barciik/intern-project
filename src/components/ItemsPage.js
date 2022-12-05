@@ -30,6 +30,7 @@ class ItemsPage extends Component {
 		return (
 			<div className={classes.layout}>
 				<h2 className={classes.categoryName}>{this.props.category}</h2>
+				{this.props.errorMessage && <p className={classes.error}>{this.props.errorMessage}</p>}
 				<div className={classes.cards}>{this.displayItems()}</div>
 			</div>
 		);
@@ -38,6 +39,7 @@ class ItemsPage extends Component {
 
 const mapStateToProps = (state) => ({
 	currency: state.cart.currency,
+	errorMessage: state.cart.errorMessage
 });
 
 const mapDispatchToProps = { changeCurrency };

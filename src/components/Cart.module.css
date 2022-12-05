@@ -24,7 +24,8 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	gap: 1rem;
+	width: 50%;
+	/* gap: 1rem; */
 }
 
 .price {
@@ -66,7 +67,7 @@ font-size: 16px;
 	text-align: center;
 	font-weight: 400;
 	/* line-height: 260%; */
-	cursor: pointer;
+	/* cursor: pointer; */
 	transition: color 0.3s, background-color 0.3s;
 	font-family: 'Source Sans Pro', sans-serif;
 	font-style: normal;
@@ -80,29 +81,29 @@ font-size: 16px;
 	color: #fff;
 }
 
-.attribute:hover {
+/* .attribute:hover {
 	background: #1d1f22;
 	border: 1px solid #1d1f22;
 	color: #fff;
-}
+} */
 
 .color {
 	width: 20px;
 	height: 20px;
-	cursor: pointer;
+	/* cursor: pointer; */
 	border: 1px solid black;
 }
 
 .colorSelected {
 	width: 20px;
 	height: 20px;
-	cursor: pointer;
+	/* cursor: pointer; */
 	border: 2px solid #5ece7b;
 }
 
-.color:hover {
+/* .color:hover {
 	border: 2px solid #5ece7b;
-}
+} */
 
 /* .sizes,
 .colors {
@@ -168,7 +169,8 @@ font-size: 16px;
 .itemImg {
 	display: flex;
 	align-items: center;
-    max-width: 40%;
+	width: 40%;
+    /* max-width: 40%; */
 	height: 185px;
 }
 

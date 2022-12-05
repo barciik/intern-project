@@ -72,6 +72,7 @@ class ItemPage extends Component {
 					<div className={itemPage.infoSection}>
 						<h2 className={itemPage.title}>{item.name}</h2>
 						<p className={itemPage.brand}>{item.brand}</p>
+						<p className={itemPage.error}>{this.props.errorMessage}</p>
 						{item.attributes.map((attr) => {
 							return (
 								<Fragment key={attr.name}>
@@ -184,6 +185,7 @@ class ItemPage extends Component {
 
 const mapStateToProps = (state) => ({
 	currency: state.cart.currency,
+	errorMessage: state.cart.errorMessage
 });
 
 const mapDispatchToProps = { addToCart, setAttribute };
