@@ -15,7 +15,10 @@ class Checkout extends Component {
 				<div className={checkoutStyles.cartItems}>
 					{this.props.cart.map((item) => {
 						return (
-							<div key={item.id} className={checkoutStyles.cartItem}>
+							<div
+								key={`${item.id} ${JSON.stringify(item.selectedAttributes)}`}
+								className={checkoutStyles.cartItem}
+							>
 								<div className={checkoutStyles.itemInfo}>
 									<h4 className={checkoutStyles.name}>{item.name}</h4>
 									<h5 className={checkoutStyles.brand}>{item.brand}</h5>
